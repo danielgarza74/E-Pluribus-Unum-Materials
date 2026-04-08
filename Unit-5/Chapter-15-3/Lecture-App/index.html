@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lecture 15.3: The European Theater</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<style>
+:root {
+/* MAPPED HEX CODES: Blackout Indigo Scheme */
+--color-navy-deep: #20263A;
+--color-cream: #F4EBDD;
+--color-navy: #4F6FA3;
+--color-steel-nib: #7F7A74;
+--color-gold: #C45A44;
+--color-wax-red: #8B0000;
+--font-heading: 'Times New Roman', serif;
+--font-body: 'Arial', sans-serif;
+--font-ui: 'Verdana', sans-serif;
+}
+body { margin: 0; background-color: var(--color-navy-deep); color: var(--color-cream); font-family: var(--font-body); line-height: 1.8; overflow-x: hidden; }
+#bg-slideshow { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.bg-slide { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; transition: transform 10s linear; }
+body::after { content: ''; position: fixed; inset: 0; background: linear-gradient(135deg, rgba(32, 38, 58, 0.9) 0%, rgba(32, 38, 58, 0.6) 100%); z-index: 1; pointer-events: none; }
+.app-container { display: flex; position: relative; z-index: 2; min-height: 100vh; }
+.side-nav { position: fixed; width: 280px; height: 100vh; background: rgba(15, 18, 28, 0.85); backdrop-filter: blur(15px); border-right: 1px solid rgba(255,255,255,0.1); padding: 2rem; display: flex; flex-direction: column; }
+.nav-title { font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 1rem; color: var(--color-gold); border-bottom: 1px solid var(--color-gold); padding-bottom: 0.5rem; }
+.nav-links { flex: 1; display: flex; flex-direction: column; gap: 10px; margin-top: 1rem; }
+.nav-btn { background: transparent; border: 1px solid transparent; color: var(--color-cream); text-align: left; padding: 12px; border-radius: 4px; cursor: pointer; transition: 0.3s; text-transform: uppercase; font-size: 0.9rem; font-family: var(--font-ui); }
+.nav-btn.active-nav, .nav-btn:hover { background: rgba(255,255,255,0.05); border-color: var(--color-gold); color: var(--color-gold); }
+.main-content { flex: 1; margin-left: 280px; width: calc(100% - 280px); }
+.content-block { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); padding: 2.5rem; border-radius: 8px; margin-bottom: 2rem; border: 1px solid rgba(255,255,255,0.05); }
+.hero-banner-flush { width: 100%; height: auto; display: block; object-fit: contain; border-bottom: 3px solid var(--color-gold); }
+.id-panel { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 15px; border: 1px solid var(--color-gold); padding: 1.5rem; margin-bottom: 2rem; }
+.id-panel label { font-family: var(--font-ui); font-weight: bold; }
+.id-panel input, .id-panel select { background: rgba(0,0,0,0.4); color: white; padding: 10px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); width: 100%; }
+.id-panel input[readonly], .id-panel select[disabled] { background: rgba(196, 90, 68, 0.1); border-color: var(--color-gold); cursor: not-allowed; }
+h1, h2, h3 { font-family: var(--font-heading); color: var(--color-gold); margin-top: 0; }
+p { text-indent: 0 !important; margin-bottom: 1.5rem; text-align: left; }
+.action-btn { background: rgba(0,0,0,0.4); border: 1px solid var(--color-gold); color: var(--color-gold); padding: 12px; border-radius: 4px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; font-family: var(--font-ui); }
+.action-btn:hover { background: var(--color-gold); color: white; }
+textarea.matrix-input { background: white; color: black; width: 100%; padding: 12px; border-radius: 4px; min-height: 100px; border: 2px solid var(--color-steel-nib); font-family: var(--font-body); }
+select.scenario-select { background: white; color: black; width: 100%; padding: 10px; border-radius: 4px; margin-top: 10px; border: 2px solid var(--color-navy); }
+.matrix-table { display: grid; grid-template-columns: 1fr 2fr 2fr; gap: 1px; background: var(--color-steel-nib); border: 1px solid var(--color-steel-nib); }
+.matrix-header { background: var(--color-navy); color: white; padding: 15px; font-weight: bold; text-align: center; }
+.matrix-cell { background: rgba(32, 38, 58, 0.8); padding: 15px; display: flex; align-items: center; justify-content: center; }
+.matrix-label { background: rgba(0,0,0,0.3); color: var(--color-gold); font-weight: bold; padding: 15px; }
+.chapter-section { display: none; animation: fadeIn 0.6s ease-out; }
+.active-section { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.checklist-item { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 4px; }
+.checklist-item input { transform: scale(1.3); margin-top: 6px; accent-color: var(--color-gold); }
+.term-tag { display: inline-block; background: var(--color-navy); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.85rem; margin-right: 5px; margin-bottom: 5px; }
+</style>
+</head>
+<body>
+<div id="bg-slideshow"></div>
+<div class="app-container">
+<nav class="side-nav">
+<h2 class="nav-title">Table of Contents</h2>
+<div class="nav-links">
+<button class="nav-btn active-nav" onclick="switchTab('start-page')" id="nav-start-page">INTRODUCTION</button>
+<button class="nav-btn" onclick="switchTab('section-1')" id="nav-section-1">I. STRATEGIC SCENARIOS</button>
+<button class="nav-btn" onclick="switchTab('section-2')" id="nav-section-2">II. THE AIR WAR MATRIX</button>
+<button class="nav-btn" onclick="switchTab('section-3')" id="nav-section-3">III. CASE STUDY: BASTOGNE</button>
+<button class="nav-btn" onclick="switchTab('section-4')" id="nav-section-4">IV. COMMAND MEMO</button>
+</div>
+<div class="nav-actions flex flex-col gap-2 mt-auto">
+<button class="action-btn text-xs" onclick="exportProgressFile()">Save Progress</button>
+<button class="action-btn text-xs" style="border-color: var(--color-steel-nib); color: white;" onclick="document.getElementById('import-file').click()">Load Progress</button>
+<input type="file" id="import-file" style="display:none" accept=".json" onchange="importProgressFile(event)">
+<button class="action-btn text-xs" style="color: var(--color-wax-red); border-color: var(--color-wax-red);" onclick="if(confirm('Reset all?')){localStorage.clear();location.reload();}">Reset</button>
+</div>
+</nav>
+<main class="main-content">
+<section id="start-page" class="chapter-section active-section">
+<img src="assets/Lecture%20App%20Banner.png" class="hero-banner-flush">
+<div class="p-10 max-w-5xl mx-auto">
+<div class="content-block id-panel">
+<div><label class="block text-xs uppercase text-gold">Full Name</label><input type="text" id="student-name" placeholder="Enter name..."></div>
+<div><label class="block text-xs uppercase text-gold">Period</label><select id="student-period"><option value="">-</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option></select></div>
+<div><label class="block text-xs uppercase text-gold">Date</label><input type="text" id="display-date" readonly></div>
+</div>
+<div class="content-block">
+<h3 class="uppercase text-xs tracking-widest text-gold/80 mb-4">Core Objectives</h3>
+<ul class="list-disc ml-6 mb-8 text-sm text-gray-300">
+<li>Analyze the strategic debate regarding the 'Second Front' and the significance of Operation Overlord.</li>
+<li>Trace the Allied advance from North Africa through Italy and across Western Europe.</li>
+<li>Evaluate the leadership roles of Allied commanders and the impact of strategic bombing.</li>
+</ul>
+<h3 class="uppercase text-xs tracking-widest text-gold/80 mb-4">Key Terms</h3>
+<div class="flex flex-wrap mb-10">
+<span class="term-tag">European Theater</span><span class="term-tag">Dwight D. Eisenhower</span>
+<span class="term-tag">Operation Torch</span><span class="term-tag">D-Day (Overlord)</span>
+<span class="term-tag">Battle of the Bulge</span><span class="term-tag">George S. Patton</span>
+<span class="term-tag">Tuskegee Airmen</span><span class="term-tag">V-E Day</span>
+<span class="term-tag">Harry S. Truman</span>
+</div>
+<h1>INTRODUCTION</h1>
+<p>Victory in Europe was not a single event, but the result of a coordinated multi-stage campaign that leveraged American industrial power, Allied air superiority, and the immense sacrifice of soldiers across multiple theaters. Following the "Germany First" mandate, the Grand Alliance navigated deep internal disagreements—specifically the contentious debate over when and where to open the "Second Front" in Western Europe.</p>
+<p>From the early training grounds of North Africa during Operation Torch to the scale-climbing heroism of Omaha Beach on D-Day, Allied forces moved from inexperience to mastery. This application will test your understanding of the strategic decisions, military campaigns, and leadership roles required to liberate occupied Europe and secure the unconditional surrender of Nazi Germany.</p>
+<button class="action-btn w-full mt-4" onclick="validateStartPage()">Begin Application -></button>
+</div>
+</div>
+</section>
+
+<!-- SECTION I: SCENARIOS -->
+<section id="section-1" class="chapter-section">
+<div class="p-10 max-w-5xl mx-auto">
+<div class="content-block">
+<h2>I. Strategic Scenarios</h2>
+<p>Evaluate the following historical turning points. Based on the lecture, select the most accurate strategic decision or outcome for each scenario.</p>
+<div class="space-y-8 mt-8">
+<div class="p-4 border-l-4 border-gold bg-black/20">
+<label class="font-bold">Scenario 1: The 'Soft Underbelly' Debate</label>
+<p class="text-sm italic text-gray-400 mt-1">Stalin demands an immediate cross-channel invasion of France to relieve the Red Army. Churchill advocates for a peripheral strategy in the Mediterranean. What does FDR decide?</p>
+<select id="scen-1" class="scenario-select">
+<option value="">Select an option...</option>
+<option>Immediate D-Day: Launching Operation Overlord in 1942 to satisfy Stalin.</option>
+<option>Coalition Unity: Choosing the Mediterranean peripheral strategy to build experience.</option>
+<option>Pacific Pivot: Diverting all resources to fight Japan until Germany weakens.</option>
+<option>Nuclear Strike: Implementing the Manhattan Project's first prototype.</option>
+<option>Neutrality: Withdrawing U.S. troops until the Allies agree on a single plan.</option>
+</select>
+</div>
+<div class="p-4 border-l-4 border-gold bg-black/20">
+<label class="font-bold">Scenario 2: The Lesson of Kasserine Pass</label>
+<p class="text-sm italic text-gray-400 mt-1">In early 1943, inexperienced American troops are shattered by Rommel's Afrika Korps. How does the Allied command respond?</p>
+<select id="scen-2" class="scenario-select">
+<option value="">Select an option...</option>
+<option>Withdrawal: Allied forces retreat to Morocco and wait for 1944.</option>
+<option>Leadership Change: Bringing in George S. Patton to restore aggressive discipline.</option>
+<option>Stalemate: Negotiating a separate peace with the Vichy French government.</option>
+<option>Technological Shift: Abandoning tanks in favor of total air support.</option>
+<option>Direct Appeal: FDR asks Hitler for a temporary ceasefire.</option>
+</select>
+</div>
+<div class="p-4 border-l-4 border-gold bg-black/20">
+<label class="font-bold">Scenario 3: Escort Crisis over Germany</label>
+<p class="text-sm italic text-gray-400 mt-1">U.S. bombers are being slaughtered by the Luftwaffe on deep daylight raids. What technological breakthrough changes the air war?</p>
+<select id="scen-3" class="scenario-select">
+<option value="">Select an option...</option>
+<option>Night Bombing: USAAF switches to RAF-style nighttime area bombing.</option>
+<option>P-51 Mustang with Drop Tanks: Allowing fighters to escort bombers deep into Germany.</option>
+<option>Stealth Technology: The invention of radar-absorbent paint for B-17s.</option>
+<option>Glider Missions: Deploying silent gliders to drop bombs without engines.</option>
+<option>The V-2 Rocket: U.S. starts using rockets instead of crewed bombers.</option>
+</select>
+</div>
+<div class="p-4 border-l-4 border-gold bg-black/20">
+<label class="font-bold">Scenario 4: Operation Fortitude</label>
+<p class="text-sm italic text-gray-400 mt-1">Allied planners need to hide the largest invasion in history. How do they handle the Normandy planning?</p>
+<select id="scen-4" class="scenario-select">
+<option value="">Select an option...</option>
+<option>Open Diplomacy: Publicly announcing the invasion date to intimidate Hitler.</option>
+<li>Deception: Creating a fake army at Pas-de-Calais to distract German intelligence.</li>
+<option>Limited Force: Only attacking one beach (Omaha) with total concentration.</option>
+<option>Secret Treaty: Paying German generals to ignore the Normandy coast.</option>
+<option>Sabotage: Dropping the Tuskegee Airmen into Berlin the night before.</option>
+</select>
+</div>
+<div class="p-4 border-l-4 border-gold bg-black/20">
+<label class="font-bold">Scenario 5: The Ardennes Surprise</label>
+<p class="text-sm italic text-gray-400 mt-1">In December 1944, Hitler launches a final winter offensive through the Ardennes. American troops are surrounded at Bastogne. What happens next?</p>
+<select id="scen-5" class="scenario-select">
+<option value="">Select an option...</option>
+<option>Surrender: McAuliffe accepts German terms to save his men.</option>
+<option>Patton's Pivot: A 90-degree turn of the Third Army to strike the German flank.</option>
+<option>Soviet Intervention: Stalin drops paratroopers into Belgium to assist.</option>
+<option>Atomic Deployment: The use of the first atomic bomb in the Ardennes forest.</option>
+<option>Naval Evacuation: A 'Dunkirk-style' rescue from the Belgian coast.</option>
+</select>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION II: CONCEPTUAL MATRIX -->
+<section id="section-2" class="chapter-section">
+<div class="p-10 max-w-5xl mx-auto">
+<div class="content-block">
+<h2>II. The Air War Matrix</h2>
+<p>The "War in the Clouds" was fought using two distinct philosophies. Compare the RAF and USAAF strategies based on the lecture.</p>
+<div class="matrix-table mt-8">
+<div class="matrix-header">Metric</div>
+<div class="matrix-header">RAF (British)</div>
+<div class="matrix-header">USAAF (American)</div>
+<div class="matrix-label">Time & Method</div>
+<div class="matrix-cell"><textarea id="matrix-1-a" class="matrix-input" placeholder="Describe the specific time and bombing method..."></textarea></div>
+<div class="matrix-cell"><textarea id="matrix-1-b" class="matrix-input" placeholder="Describe the specific time and bombing method..."></textarea></div>
+<div class="matrix-label">Primary Targets</div>
+<div class="matrix-cell"><textarea id="matrix-2-a" class="matrix-input" placeholder="List the types of targets targeted..."></textarea></div>
+<div class="matrix-cell"><textarea id="matrix-2-b" class="matrix-input" placeholder="List the types of targets targeted..."></textarea></div>
+<div class="matrix-label">Strategic Goal</div>
+<div class="matrix-cell"><textarea id="matrix-3-a" class="matrix-input" placeholder="Explain the desired effect on Germany..."></textarea></div>
+<div class="matrix-cell"><textarea id="matrix-3-b" class="matrix-input" placeholder="Explain the desired effect on Germany..."></textarea></div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION III: CASE STUDY -->
+<section id="section-3" class="chapter-section">
+<div class="p-10 max-w-5xl mx-auto">
+<div class="content-block">
+<h2>III. Case Study: "Nuts!" at Bastogne</h2>
+<div class="flex items-start gap-6 mt-4">
+<div class="w-16 h-16 shrink-0 bg-gold rounded-full flex items-center justify-center">
+<svg class="w-10 h-10 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+</div>
+<div>
+<p class="italic text-gray-300">December 1944. The 101st Airborne is surrounded in the Belgian town of Bastogne. German commanders deliver a written demand for surrender or face total annihilation by artillery. General McAuliffe responds with a single, typewritten word: "Nuts!" Outside, the weather is too fogged-in for air support, and Hitler's final reserves are pushing hard.</p>
+</div>
+</div>
+<div class="mt-8 bg-black/30 p-6 rounded border border-white/10">
+<h4 class="text-gold uppercase text-xs mb-4">Strategic Factors of the Bulge</h4>
+<div class="checklist-item"><input type="checkbox" id="check-1"><label>The significance of capturing the port of Antwerp for German logistics.</label></div>
+<div class="checklist-item"><input type="checkbox" id="check-2"><label>The impact of winter weather on Allied air superiority.</label></div>
+<div class="checklist-item"><input type="checkbox" id="check-3"><label>The logistical feat required for Patton's 90-degree pivot.</label></div>
+<div class="checklist-item"><input type="checkbox" id="check-4"><label>The depletion of Germany's final strategic reserves after the defeat.</label></div>
+</div>
+<h3 class="mt-8">Final Verdict</h3>
+<p>Explain why Hitler's "final gamble" failed despite the initial surprise. How did American resilience at Bastogne and Patton's tactical speed turn a potential disaster into the end of Germany's offensive capability?</p>
+<textarea id="case-verdict" class="matrix-input" style="min-height: 150px;" placeholder="Write your analysis here..."></textarea>
+</div>
+</div>
+</section>
+
+<!-- SECTION IV: CREATIVE STRATEGY -->
+<section id="section-4" class="chapter-section">
+<div class="p-10 max-w-5xl mx-auto">
+<div class="content-block">
+<h2>IV. Command Memo: The Advance to the Elbe</h2>
+<p>April 1945. You are a senior advisor to General Eisenhower. The Red Army is closing in on Berlin from the East. Allied troops are moving rapidly from the West. The Elbe River is your current strategic marker.</p>
+<div class="p-6 bg-white/5 border border-dashed border-gold rounded mt-6">
+<h4 class="text-gold font-bold mb-2">Prompt: The Elbe Decision</h4>
+<p class="text-sm">Draft a memo to Eisenhower advising him on whether to push for Berlin or halt at the Elbe. Consider: the high cost of urban warfare, the political landscape of post-war Europe, and the health of the alliance with Stalin. Mention how the "Germany First" strategy has reached its culmination and how the leadership of the new President, Harry S. Truman, should be addressed.</p>
+<textarea id="creative-essay" class="matrix-input mt-4" style="min-height: 300px;" placeholder="Strategic Memorandum: To Supreme Headquarters Allied Expeditionary Force..."></textarea>
+</div>
+<div class="mt-10 p-6 border-t border-gold text-center">
+<p class="text-sm italic mb-4 text-gray-400">Review all sections. Your progress is saved locally. Clicking "Finish" generates the final report.</p>
+<button class="action-btn px-12 py-4 text-xl" onclick="downloadJSON()">Finish & Download Report</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+<script>
+let currentTab = 'start-page';
+const bgImages = ['assets/bg_1.png', 'assets/bg_2.png', 'assets/bg_3.png', 'assets/bg_4.png', 'assets/bg_5.png', 'assets/bg_6.png', 'assets/bg_7.png'];
+function initSlideshow() {
+const container = document.getElementById('bg-slideshow');
+bgImages.forEach(img => {
+const div = document.createElement('div');
+div.className = 'bg-slide';
+div.style.backgroundImage = `url('${img}')`;
+container.appendChild(div);
+});
+const slides = document.querySelectorAll('.bg-slide');
+if (slides.length === 0) return;
+let idx = 0; gsap.set(slides[0], {opacity: 1, scale: 1.1});
+setInterval(() => {
+gsap.to(slides[idx], {opacity: 0, scale: 1, duration: 3});
+idx = (idx + 1) % slides.length;
+gsap.to(slides[idx], {opacity: 1, scale: 1.1, duration: 3});
+}, 10000);
+}
+function switchTab(id) {
+if (id !== 'start-page' && !validateStartPage(true)) return;
+document.querySelectorAll('.chapter-section').forEach(s => s.classList.remove('active-section'));
+document.getElementById(id).classList.add('active-section');
+document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-nav'));
+document.getElementById('nav-' + id).classList.add('active-nav');
+currentTab = id; window.scrollTo({top: 0, behavior: 'smooth'});
+}
+function validateStartPage(silent = false) {
+const name = document.getElementById('student-name').value;
+const period = document.getElementById('student-period').value;
+if (!name || !period) {
+if (!silent) alert("Please enter your Full Name and Period to proceed.");
+return false;
+}
+document.getElementById('student-name').readOnly = true;
+document.getElementById('student-period').disabled = true;
+if (!silent) switchTab('section-1');
+return true;
+}
+function getAppPayload() {
+const data = {
+lecture: "15.3 The European Theater",
+timestamp: new Date().toLocaleString(),
+studentName: document.getElementById('student-name').value,
+studentPeriod: document.getElementById('student-period').value,
+currentTab: currentTab,
+isLocked: document.getElementById('student-name').readOnly,
+responses: {}
+};
+document.querySelectorAll('textarea, select:not(#student-period), input[type="checkbox"]').forEach(el => {
+data.responses[el.id] = el.type === 'checkbox' ? el.checked : el.value;
+});
+return data;
+}
+function applyPayload(data) {
+if(!data) return;
+document.getElementById('student-name').value = data.studentName || "";
+document.getElementById('student-period').value = data.studentPeriod || "";
+if(data.isLocked || (data.studentName && data.studentName.trim() !== "")) {
+document.getElementById('student-name').readOnly = true;
+document.getElementById('student-period').disabled = true;
+}
+if(data.responses) {
+Object.keys(data.responses).forEach(id => {
+const el = document.getElementById(id);
+if(el) {
+if(el.type === 'checkbox') el.checked = data.responses[id];
+else el.value = data.responses[id];
+}
+});
+}
+if(data.currentTab) switchTab(data.currentTab);
+}
+function exportProgressFile() {
+const data = getAppPayload();
+const name = (data.studentName || "Student").replace(/\s+/g, '_');
+const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
+const link = document.createElement('a');
+link.href = URL.createObjectURL(blob);
+link.download = `Progress_Lecture15.3_${name}.json`;
+link.click();
+}
+function importProgressFile(e) {
+const file = e.target.files[0];
+if(!file) return;
+const reader = new FileReader();
+reader.onload = (evt) => {
+try {
+const data = JSON.parse(evt.target.result);
+data.isLocked = true;
+applyPayload(data);
+alert("Progress Restored. Identity has been locked.");
+} catch (err) { alert("Error loading file."); }
+};
+reader.readAsText(file);
+}
+function downloadJSON() {
+const data = getAppPayload();
+if (!data.studentName) { alert("Please enter your name on the first page."); switchTab('start-page'); return; }
+const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
+const a = document.createElement('a');
+a.href = URL.createObjectURL(blob);
+a.download = `Final_Lecture15.3_${data.studentName.replace(/\s+/g, '_')}.json`;
+a.click();
+}
+window.onload = () => { 
+document.getElementById('display-date').value = new Date().toLocaleDateString();
+initSlideshow(); 
+const saved = localStorage.getItem('lecture_15_3_autosave');
+if (saved) { if (confirm("Found autosaved progress. Load it?")) { applyPayload(JSON.parse(saved)); } }
+setInterval(() => { const data = getAppPayload(); localStorage.setItem('lecture_15_3_autosave', JSON.stringify(data)); }, 30000);
+};
+</script>
+</body>
+</html>

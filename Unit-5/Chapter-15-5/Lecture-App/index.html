@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lecture 15.5: The Holocaust</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<style>
+:root {
+/* MAPPED HEX CODES: Blackout Indigo Scheme */
+--color-navy-deep: #20263A;
+--color-cream: #F4EBDD;
+--color-navy: #4F6FA3;
+--color-steel-nib: #7F7A74;
+--color-gold: #C45A44;
+--color-wax-red: #8B0000;
+--font-heading: 'Times New Roman', serif;
+--font-body: 'Arial', sans-serif;
+--font-ui: 'Verdana', sans-serif;
+}
+body { margin: 0; background-color: var(--color-navy-deep); color: var(--color-cream); font-family: var(--font-body); line-height: 1.8; overflow-x: hidden; }
+#bg-slideshow { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.bg-slide { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; transition: transform 10s linear; }
+body::after { content: ''; position: fixed; inset: 0; background: linear-gradient(135deg, rgba(32, 38, 58, 0.9) 0%, rgba(32, 38, 58, 0.6) 100%); z-index: 1; pointer-events: none; }
+.app-container { display: flex; position: relative; z-index: 2; min-height: 100vh; }
+.side-nav { position: fixed; width: 280px; height: 100vh; background: rgba(15, 18, 28, 0.85); backdrop-filter: blur(15px); border-right: 1px solid rgba(255,255,255,0.1); padding: 2rem; display: flex; flex-direction: column; }
+.nav-title { font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 1rem; color: var(--color-gold); border-bottom: 1px solid var(--color-gold); padding-bottom: 0.5rem; }
+.nav-links { flex: 1; display: flex; flex-direction: column; gap: 10px; margin-top: 1rem; }
+.nav-btn { background: transparent; border: 1px solid transparent; color: var(--color-cream); text-align: left; padding: 12px; border-radius: 4px; cursor: pointer; transition: 0.3s; text-transform: uppercase; font-size: 0.9rem; font-family: var(--font-ui); }
+.nav-btn.active-nav, .nav-btn:hover { background: rgba(255,255,255,0.05); border-color: var(--color-gold); color: var(--color-gold); }
+.main-content { flex: 1; margin-left: 280px; width: calc(100% - 280px); }
+.content-block { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); padding: 2.5rem; border-radius: 8px; margin-bottom: 2rem; border: 1px solid rgba(255,255,255,0.05); }
+.hero-banner-flush { width: 100%; height: auto; display: block; object-fit: contain; border-bottom: 3px solid var(--color-gold); }
+.id-panel { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 15px; border: 1px solid var(--color-gold); padding: 1.5rem; margin-bottom: 2rem; }
+.id-panel label { font-family: var(--font-ui); font-weight: bold; }
+.id-panel input, .id-panel select { background: rgba(0,0,0,0.4); color: white; padding: 10px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); width: 100%; }
+.id-panel input[readonly], .id-panel select[disabled] { background: rgba(196, 90, 68, 0.1); border-color: var(--color-gold); cursor: not-allowed; }
+h1, h2, h3 { font-family: var(--font-heading); color: var(--color-gold); margin-top: 0; }
+p { text-indent: 0 !important; margin-bottom: 1.5rem; text-align: left; }
+.action-btn { background: rgba(0,0,0,0.4); border: 1px solid var(--color-gold); color: var(--color-gold); padding: 12px; border-radius: 4px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; font-family: var(--font-ui); }
+.action-btn:hover { background: var(--color-gold); color: white; }
+textarea.matrix-input { background: white; color: black; width: 100%; padding: 12px; border-radius: 4px; min-height: 100px; border: 2px solid var(--color-steel-nib); font-family: var(--font-body); }
+select.scenario-select { background: white; color: black; width: 100%; padding: 10px; border-radius: 4px; margin-top: 10px; border: 2px solid var(--color-navy); }
+.matrix-table { display: grid; grid-template-columns: 1fr 2fr 2fr; gap: 1px; background: var(--color-steel-nib); border: 1px solid var(--color-steel-nib); }
+.matrix-header { background: var(--color-navy); color: white; padding: 15px; font-weight: bold; text-align: center; }
+.matrix-cell { background: rgba(32, 38, 58, 0.8); padding: 15px; display: flex; align-items: center; justify-content: center; }
+.matrix-label { background: rgba(0,0,0,0.3); color: var(--color-gold); font-weight: bold; padding: 15px; }
+.chapter-section { display: none; animation: fadeIn 0.6s ease-out; }
+.active-section { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.checklist-item { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 4px; }
+.checklist-item input { transform: scale(1.3); margin-top: 6px; accent-color: var(--color-gold); }
+.term-tag { display: inline-block; background: var(--color-navy); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.85rem; margin-right: 5px; margin-bottom: 5px; }
+</style>
+</head>
+<body>
+<div id="bg-slideshow"></div>
+<div class="app-container">
+<nav class="side-nav">
+<h2 class="nav-title">Table of Contents</h2>
+<div class="nav-links">
+<button class="nav-btn active-nav" onclick="switchTab('start-page')" id="nav-start-page">INTRODUCTION</button>
+<button class="nav-btn" onclick="switchTab('section-1')" id="nav-section-1">I. EVOLUTION OF TERROR</button>
+<button class="nav-btn" onclick="switchTab('section-2')" id="nav-section-2">II. THE CAMP MATRIX</button>
+<button class="nav-btn" onclick="switchTab('section-3')" id="nav-section-3">III. CASE STUDY: RESCUE</button>
+<button class="nav-btn" onclick="switchTab('section-4')" id="nav-section-4">IV. LEGAL LEGACY MEMO</button>
+</div>
+<div class="nav-actions flex flex-col gap-2 mt-auto">
+<button class="action-btn text-xs" onclick="exportProgressFile()">Save Progress</button>
+<button class="action-btn text-xs" style="border-color: var(--color-steel-nib); color: white;" onclick="document.getElementById('import-file').click()">Load Progress</button>
+<input type="file" id="import-file" style="display:none" accept=".json" onchange="importProgressFile(event)">
+<button class="action-btn text-xs" style="color: var(--color-wax-red); border-color: var(--color-wax-red);" onclick="if(confirm('Reset all?')){localStorage.clear();location.reload();}">Reset</button>
+</div>
+</nav>
+<main class="main-content">
+<section id="start-page" class="chapter-section active-section">
+<img src="assets/Lecture%20App%20Banner.png" class="hero-banner-flush">
+<div class="p-10 max-w-5xl mx-auto">
+<div class="content-block id-panel">
+<div><label class="block text-xs uppercase text-gold">Full Name</label><input type="text" id="student-name" placeholder="Enter name..."></div>
+<div><label class="block text-xs uppercase text-gold">Period</label><select id="student-period"><option value="">-</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option></select></div>
+<div><label class="block text-xs uppercase text-gold">Date</label><input type="text" id="display-date" readonly></div>
+</div>
+<div class="content-block">
+<h3 class="uppercase text-xs tracking-widest text-gold/80 mb-4">Core Objectives</h3>
+<ul class="list-disc ml-6 mb-8 text-sm text-gray-300">
+<li>Analyze how Nazi anti-Semitism transformed traditional prejudice into a pseudo-scientific racial theory.</li>
+<li>Trace the development of the 'Final Solution' from the Einsatzgruppen massacres to industrialized death camps.</li>
+<li>Evaluate the legal legacy of the Nuremberg Trials and the establishment of 'crimes against humanity.'</li>
+</ul>
+<h3 class="uppercase text-xs tracking-widest text-gold/80 mb-4">Key Terms</h3>
+<div class="flex flex-wrap mb-10">
+<span class="term-tag">Anti-Semitism</span><span class="term-tag">Nuremberg Laws</span>
+<span class="term-tag">Kristallnacht</span><span class="term-tag">Ghettos</span>
+<span class="term-tag">Genocide</span><span class="term-tag">Final Solution</span>
+<span class="term-tag">Auschwitz</span><span class="term-tag">Elie Wiesel</span>
+<span class="term-tag">War Crimes Trials</span>
+</div>
+<h1>INTRODUCTION</h1>
+<p>The Holocaust was the systematic, state-sponsored murder of approximately six million Jewish people and millions of others by the Nazi regime. It did not begin in the gas chambers; it began in the streets with legal exclusion and pseudo-scientific propaganda that defined neighbors as "subhuman" racial enemies.</p>
+<p>This process escalated from the stripping of citizenship under the 1935 Nuremberg Laws to the state-coordinated violence of Kristallnacht, and finally to the "Final Solution"—a mechanized program of extermination planned at the Wannsee Conference. This application examines the ideological roots of Nazi terror, the industrialized murder system, and the enduring legal framework of human rights created in the wake of liberation.</p>
+<button class="action-btn w-full mt-4" onclick="validateStartPage()">Begin Application -></button>
+</div>
+</div>
+</section>
+
+<!-- SECTION I: SCENARIOS -->
+<section id="section-1" class="chapter-section">
+<div class="p-10 max-w-5xl mx-auto">
+<div class="content-block">
+<h2>I. Evolution of Terror</h2>
+<p>Evaluate the following historical milestones in the Nazi program of persecution. Select the most accurate policy or turning point for each scenario.</p>
+<div class="space-y-8 mt-8">
+<div class="p-4 border-l-4 border-gold bg-black/20">
+<label class="font-bold">Scenario 1: Legal Exclusion (1935)</label>
+<p class="text-sm italic text-gray-400 mt-1">A Jewish physician in Berlin is told he can no longer practice medicine and that his marriage to a non-Jewish woman is now a crime. Which legislation is responsible?</p>
+<select id="scen-1" class="scenario-select">
+<option value="">Select an option...</option>
+<option>The Nuremberg Laws: Stripping citizenship and banning intermarriage.</option>
+<option>The Atlantic Charter: Establishing Allied war aims.</option>
+<option>The Wannsee Decree: Ordering immediate deportation to Poland.</option>
+<option>The Enabling Act: Giving Hitler absolute dictatorial power.</option>
+<option>The Versailles Treaty: Restricting German military growth.</option>
+</select>
+</div>
+<div class="p-4 border-l-4 border-gold bg-black/20">
+<label class="font-bold">Scenario 2: Organized Terror (1938)</label>
+<p class="text-sm italic text-gray-400 mt-1">Nationwide, synagogues are burned and thousands of Jewish businesses are ransacked. For the first time, 30,000 men are sent to camps solely for their identity. What is this event?</p>
+<select id="scen-2" class="scenario-select">
+<option value="">Select an option...</option>
+<option>The Munich Conference: Attempting to appease Hitler's expansion.</option>
+<option>Kristallnacht: The 'Night of Broken Glass' signaling a shift to physical violence.</option>
+<option>The Bataan March: Forced movement of prisoners in the Pacific.</option>
+<option>Operation Barbarossa: The invasion of the Soviet Union.</option>
+<option>The Aryanization Act: Forcing the sale of property to the state.</option>
+</select>
+</div>
+<div class="p-4 border-l-4 border-gold bg-black/20">
+<label class="font-bold">Scenario 3: The Attrition of the Ghettos</label>
+<p class="text-sm italic text-gray-400 mt-1">In occupied Poland, thousands are confined to sealed urban districts like Warsaw. There is no sanitation and almost no food. What is the Nazi purpose for these zones?</p>
+<select id="scen-3" class="scenario-select">
+<option value="">Select an option...</option>
+<option>Safe Havens: Protecting the population from the front lines of the war.</option>
+<option>Instruments of Slow Death: Reducing the population through starvation and disease.</option>
+<option>Military Outposts: Housing soldiers meant for the Eastern Front.</option>
+<option>Industrial Centers: Providing fair-wage jobs for the local community.</option>
+<option>Education Zones: Schools meant to teach Nazi racial theory to the youth.</option>
+</select>
+</div>
+<div class="p-4 border-l-4 border-gold bg-black/20">
+<label class="font-bold">Scenario 4: The Mobile Killing Units (1941)</label>
+<p class="text-sm italic text-gray-400 mt-1">Following the army into the Soviet Union, special units round up communities and execute them at ravines like Babi Yar. Who are these units?</p>
+<select id="scen-4" class="scenario-select">
+<option value="">Select an option...</option>
+<option>The Luftwaffe: Providing air support for the German infantry.</option>
+<option>The Einsatzgruppen: Mobile killing squads responsible for the 'Holocaust by bullets.'</option>
+<option>The Red Tails: Elite pilots escorting bombers over Germany.</option>
+<option>The Righteous Among the Nations: Rescue networks operating in the forests.</option>
+<option>The Vichy Guard: French units collaborating with the Nazi regime.</option>
+</select>
+</div>
+<div class="p-4 border-l-4 border-gold bg-black/20">
+<label class="font-bold">Scenario 5: The Final Solution (1942)</label>
+<p class="text-sm italic text-gray-400 mt-1">High-ranking officials meet at a villa to coordinate the bureaucracy of genocide. Mass murder is now to be industrialized. Where does this happen?</p>
+<select id="scen-5" class="scenario-select">
+<option value="">Select an option...</option>
+<option>The Nuremberg Tribunal: Where war criminals were later prosecuted.</option>
+<option>The Wannsee Conference: Where the 'Final Solution' was coordinated.</option>
+<option>The Potsdam Conference: Where Truman decided to use the atomic bomb.</option>
+<option>The Warsaw Uprising: Where Jewish fighters held off the German army.</option>
+<option>The Yalta Conference: Where the Big Three planned post-war Europe.</option>
+</select>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION II: CONCEPTUAL MATRIX -->
+<section id="section-2" class="chapter-section">
+<div class="p-10 max-w-5xl mx-auto">
+<div class="content-block">
+<h2>II. The Camp Matrix</h2>
+<p>The Nazi regime utilized various types of facilities to achieve their racial and political goals. Compare the two primary systems based on the lecture.</p>
+<div class="matrix-table mt-8">
+<div class="matrix-header">Metric</div>
+<div class="matrix-header">Concentration Camps</div>
+<div class="matrix-header">Death Camps (Extermination)</div>
+<div class="matrix-label">Primary Design</div>
+<div class="matrix-cell"><textarea id="matrix-1-a" class="matrix-input" placeholder="Describe the focus on detention and labor..."></textarea></div>
+<div class="matrix-cell"><textarea id="matrix-1-b" class="matrix-input" placeholder="Describe the focus on industrialized murder..."></textarea></div>
+<div class="matrix-label">Examples</div>
+<div class="matrix-cell"><textarea id="matrix-2-a" class="matrix-input" placeholder="List early examples like Dachau..."></textarea></div>
+<div class="matrix-cell"><textarea id="matrix-2-b" class="matrix-input" placeholder="List specialized sites like Treblinka..."></textarea></div>
+<div class="matrix-label">Outcome for Victims</div>
+<div class="matrix-cell"><textarea id="matrix-3-a" class="matrix-input" placeholder="Describe the system of slow dehumanization..."></textarea></div>
+<div class="matrix-cell"><textarea id="matrix-3-b" class="matrix-input" placeholder="Describe the system of immediate execution..."></textarea></div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION III: CASE STUDY -->
+<section id="section-3" class="chapter-section">
+<div class="p-10 max-w-5xl mx-auto">
+<div class="content-block">
+<h2>III. Case Study: Raoul Wallenberg</h2>
+<div class="flex items-start gap-6 mt-4">
+<div class="w-16 h-16 shrink-0 bg-gold rounded-full flex items-center justify-center">
+<svg class="w-10 h-10 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+</div>
+<div>
+<p class="italic text-gray-300">1944. Hungarian Jews are being deported to Auschwitz at a rate of 12,000 per day. Raoul Wallenberg, a Swedish diplomat, arrives in Budapest. He begins issuing "Schutz-Passes"—protective passports that claim the bearer is a Swedish subject awaiting repatriation. He rents buildings and flies the Swedish flag, declaring them sovereign territory to shelter thousands. He is physically intervening between the Red Cross and the SS, using bluff, bribery, and moral authority to stall the Final Solution.</p>
+</div>
+</div>
+<div class="mt-8 bg-black/30 p-6 rounded border border-white/10">
+<h4 class="text-gold uppercase text-xs mb-4">Factors of Righteous Defiance</h4>
+<div class="checklist-item"><input type="checkbox" id="check-1"><label>The use of diplomatic 'sovereignty' to create safe houses.</label></div>
+<div class="checklist-item"><input type="checkbox" id="check-2"><label>The moral contrast between individual rescue and state-sponsored murder.</label></div>
+<div class="checklist-item"><input type="checkbox" id="check-3"><label>The risk of personal execution for defying Nazi deportation orders.</label></div>
+<div class="checklist-item"><input type="checkbox" id="check-4"><label>The recognition of 'Righteous Among the Nations' by Yad Vashem.</label></div>
+</div>
+<h3 class="mt-8">Final Verdict</h3>
+<p>Analyze why individuals like Wallenberg are recognized as "Righteous." In a regime that used the law as a weapon of exclusion, how did Wallenberg use the law (and its loopholes) to defend human dignity? Explain the significance of "Never Again" in this context.</p>
+<textarea id="case-verdict" class="matrix-input" style="min-height: 150px;" placeholder="Write your analysis here..."></textarea>
+</div>
+</div>
+</section>
+
+<!-- SECTION IV: LEGAL LEGACY MEMO -->
+<section id="section-4" class="chapter-section">
+<div class="p-10 max-w-5xl mx-auto">
+<div class="content-block">
+<h2>IV. Legal Legacy Memo: The Nuremberg Precedents</h2>
+<p>1946. You are a legal analyst at the Nuremberg War Crimes Trials. The defense has argued that the accused were simply "following superior orders" given by a sovereign government.</p>
+<div class="p-6 bg-white/5 border border-dashed border-gold rounded mt-6">
+<h4 class="text-gold font-bold mb-2">Prompt: Establishing Individual Accountability</h4>
+<p class="text-sm">Draft a memo summarizing why the "Superior Orders" defense must be rejected. Use the lecture concepts of <strong>Crimes Against Humanity</strong> and <strong>Genocide</strong>. Explain how these trials lay the foundation for modern international law and the Universal Declaration of Human Rights. Reflect on Elie Wiesel's warning: why is the role of <strong>bearing witness</strong> and documentation (as ordered by Eisenhower) essential for future justice?</p>
+<textarea id="creative-essay" class="matrix-input mt-4" style="min-height: 300px;" placeholder="Legal Memorandum: To the International Military Tribunal..."></textarea>
+</div>
+<div class="mt-10 p-6 border-t border-gold text-center">
+<p class="text-sm italic mb-4 text-gray-400">Review all sections. Your progress is saved locally. Clicking "Finish" generates the final archival report.</p>
+<button class="action-btn px-12 py-4 text-xl" onclick="downloadJSON()">Finish & Download Report</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+<script>
+let currentTab = 'start-page';
+const bgImages = ['assets/bg_1.png', 'assets/bg_2.png', 'assets/bg_3.png', 'assets/bg_4.png', 'assets/bg_5.png', 'assets/bg_6.png', 'assets/bg_7.png'];
+function initSlideshow() {
+const container = document.getElementById('bg-slideshow');
+bgImages.forEach(img => {
+const div = document.createElement('div');
+div.className = 'bg-slide';
+div.style.backgroundImage = `url('${img}')`;
+container.appendChild(div);
+});
+const slides = document.querySelectorAll('.bg-slide');
+if (slides.length === 0) return;
+let idx = 0; gsap.set(slides[0], {opacity: 1, scale: 1.1});
+setInterval(() => {
+gsap.to(slides[idx], {opacity: 0, scale: 1, duration: 3});
+idx = (idx + 1) % slides.length;
+gsap.to(slides[idx], {opacity: 1, scale: 1.1, duration: 3});
+}, 10000);
+}
+function switchTab(id) {
+if (id !== 'start-page' && !validateStartPage(true)) return;
+document.querySelectorAll('.chapter-section').forEach(s => s.classList.remove('active-section'));
+document.getElementById(id).classList.add('active-section');
+document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-nav'));
+document.getElementById('nav-' + id).classList.add('active-nav');
+currentTab = id; window.scrollTo({top: 0, behavior: 'smooth'});
+}
+function validateStartPage(silent = false) {
+const name = document.getElementById('student-name').value;
+const period = document.getElementById('student-period').value;
+if (!name || !period) {
+if (!silent) alert("Please enter your Full Name and Period to proceed.");
+return false;
+}
+document.getElementById('student-name').readOnly = true;
+document.getElementById('student-period').disabled = true;
+if (!silent) switchTab('section-1');
+return true;
+}
+function getAppPayload() {
+const data = {
+lecture: "15.5 The Holocaust",
+timestamp: new Date().toLocaleString(),
+studentName: document.getElementById('student-name').value,
+studentPeriod: document.getElementById('student-period').value,
+currentTab: currentTab,
+isLocked: document.getElementById('student-name').readOnly,
+responses: {}
+};
+document.querySelectorAll('textarea, select:not(#student-period), input[type="checkbox"]').forEach(el => {
+data.responses[el.id] = el.type === 'checkbox' ? el.checked : el.value;
+});
+return data;
+}
+function applyPayload(data) {
+if(!data) return;
+document.getElementById('student-name').value = data.studentName || "";
+document.getElementById('student-period').value = data.studentPeriod || "";
+if(data.isLocked || (data.studentName && data.studentName.trim() !== "")) {
+document.getElementById('student-name').readOnly = true;
+document.getElementById('student-period').disabled = true;
+}
+if(data.responses) {
+Object.keys(data.responses).forEach(id => {
+const el = document.getElementById(id);
+if(el) {
+if(el.type === 'checkbox') el.checked = data.responses[id];
+else el.value = data.responses[id];
+}
+});
+}
+if(data.currentTab) switchTab(data.currentTab);
+}
+function exportProgressFile() {
+const data = getAppPayload();
+const name = (data.studentName || "Student").replace(/\s+/g, '_');
+const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
+const link = document.createElement('a');
+link.href = URL.createObjectURL(blob);
+link.download = `Progress_Lecture15.5_${name}.json`;
+link.click();
+}
+function importProgressFile(e) {
+const file = e.target.files[0];
+if(!file) return;
+const reader = new FileReader();
+reader.onload = (evt) => {
+try {
+const data = JSON.parse(evt.target.result);
+data.isLocked = true;
+applyPayload(data);
+alert("Progress Restored. Identity has been locked.");
+} catch (err) { alert("Error loading file."); }
+};
+reader.readAsText(file);
+}
+function downloadJSON() {
+const data = getAppPayload();
+if (!data.studentName) { alert("Please enter your name on the first page."); switchTab('start-page'); return; }
+const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
+const a = document.createElement('a');
+a.href = URL.createObjectURL(blob);
+a.download = `Final_Lecture15.5_${data.studentName.replace(/\s+/g, '_')}.json`;
+a.click();
+}
+window.onload = () => { 
+document.getElementById('display-date').value = new Date().toLocaleDateString();
+initSlideshow(); 
+const saved = localStorage.getItem('lecture_15_5_autosave');
+if (saved) { if (confirm("Found autosaved progress. Load it?")) { applyPayload(JSON.parse(saved)); } }
+setInterval(() => { const data = getAppPayload(); localStorage.setItem('lecture_15_5_autosave', JSON.stringify(data)); }, 30000);
+};
+</script>
+</body>
+</html>

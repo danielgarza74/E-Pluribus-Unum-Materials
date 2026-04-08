@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lecture 16.1: The Arsenal of Democracy</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<style>
+:root {
+/* MAPPED HEX CODES: Ink Black Scheme */
+--color-navy-deep: #2A2A2A;
+--color-cream: #EFE6D6;
+--color-navy: #70775F;
+--color-steel-nib: #3D5168;
+--color-gold: #B94A3F; /* Using Highlight slot for consistent Branding */
+--color-wax-red: #8B0000;
+--font-heading: 'Times New Roman', serif;
+--font-body: 'Arial', sans-serif;
+--font-ui: 'Verdana', sans-serif;
+}
+body { margin: 0; background-color: var(--color-navy-deep); color: var(--color-cream); font-family: var(--font-body); line-height: 1.8; overflow-x: hidden; }
+#bg-slideshow { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.bg-slide { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; transition: transform 10s linear; }
+body::after { content: ''; position: fixed; inset: 0; background: linear-gradient(135deg, rgba(42, 42, 42, 0.9) 0%, rgba(42, 42, 42, 0.7) 100%); z-index: 1; pointer-events: none; }
+.app-container { display: flex; position: relative; z-index: 2; min-height: 100vh; }
+.side-nav { position: fixed; width: 280px; height: 100vh; background: rgba(15, 15, 15, 0.85); backdrop-filter: blur(15px); border-right: 1px solid rgba(255,255,255,0.1); padding: 2rem; display: flex; flex-direction: column; }
+.nav-title { font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 1rem; color: var(--color-gold); border-bottom: 1px solid var(--color-gold); padding-bottom: 0.5rem; }
+.nav-links { flex: 1; display: flex; flex-direction: column; gap: 10px; margin-top: 1rem; }
+.nav-btn { background: transparent; border: 1px solid transparent; color: var(--color-cream); text-align: left; padding: 12px; border-radius: 4px; cursor: pointer; transition: 0.3s; text-transform: uppercase; font-size: 0.9rem; font-family: var(--font-ui); }
+.nav-btn.active-nav, .nav-btn:hover { background: rgba(255,255,255,0.05); border-color: var(--color-gold); color: var(--color-gold); }
+.main-content { flex: 1; margin-left: 280px; width: calc(100% - 280px); }
+.content-block { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); padding: 2.5rem; border-radius: 8px; margin-bottom: 2rem; border: 1px solid rgba(255,255,255,0.05); }
+.hero-banner-flush { width: 100%; height: auto; display: block; object-fit: contain; border-bottom: 3px solid var(--color-gold); }
+.id-panel { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 15px; border: 1px solid var(--color-gold); padding: 1.5rem; margin-bottom: 2rem; }
+.id-panel label { font-family: var(--font-ui); font-weight: bold; }
+.id-panel input, .id-panel select { background: rgba(0,0,0,0.4); color: white; padding: 10px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); width: 100%; }
+.id-panel input[readonly], .id-panel select[disabled] { background: rgba(185, 74, 63, 0.1); border-color: var(--color-gold); cursor: not-allowed; }
+h1, h2, h3 { font-family: var(--font-heading); color: var(--color-gold); margin-top: 0; }
+p { text-indent: 0 !important; margin-bottom: 1.5rem; text-align: left; }
+.action-btn { background: rgba(0,0,0,0.4); border: 1px solid var(--color-gold); color: var(--color-gold); padding: 12px; border-radius: 4px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; font-family: var(--font-ui); }
+.action-btn:hover { background: var(--color-gold); color: white; }
+textarea.matrix-input { background: white; color: black; width: 100%; padding: 12px; border-radius: 4px; min-height: 100px; border: 2px solid var(--color-steel-nib); font-family: var(--font-body); }
+select.scenario-select { background: white; color: black; width: 100%; padding: 10px; border-radius: 4px; margin-top: 10px; border: 2px solid var(--color-navy); }
+.matrix-table { display: grid; grid-template-columns: 1fr 2fr 2fr; gap: 1px; background: var(--color-steel-nib); border: 1px solid var(--color-steel-nib); }
+.matrix-header { background: var(--color-navy); color: white; padding: 15px; font-weight: bold; text-align: center; }
+.matrix-cell { background: rgba(42, 42, 42, 0.8); padding: 15px; display: flex; align-items: center; justify-content: center; }
+.matrix-label { background: rgba(0,0,0,0.3); color: var(--color-gold); font-weight: bold; padding: 15px; }
+.chapter-section { display: none; animation: fadeIn 0.6s ease-out; }
+.active-section { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.checklist-item { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 4px; }
+.checklist-item input { transform: scale(1.3); margin-top: 6px; accent-color: var(--color-gold); }
+.term-tag { display: inline-block; background: var(--color-navy); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.85rem; margin-right: 5px; margin-bottom: 5px; }
+</style>
+</head>
+<body>
+<div id="bg-slideshow"></div>
+<div class="app-container">
+<nav class="side-nav">
+<h2 class="nav-title">Table of Contents</h2>
+<div class="nav-links">
+<button class="nav-btn active-nav" onclick="switchTab('start-page')" id="nav-start-page">INTRODUCTION</button>
+<button class="nav-btn" onclick="switchTab('section-1')" id="nav-section-1">I. PRODUCTION SCENARIOS</button>
+<button class="nav-btn" onclick="switchTab('section-2')" id="nav-section-2">II. MOBILIZATION MATRIX</button>
+<button class="nav-btn" onclick="switchTab('section-3')" id="nav-section-3">III. CASE STUDY: WILLOW RUN</button>
+<button class="nav-btn" onclick="switchTab('section-4')" id="nav-section-4">IV. ARSENAL MEMO</button>
+</div>
+<div class="nav-actions flex flex-col gap-2 mt-auto">
+<button class="action-btn text-xs" onclick="exportProgressFile()">Save Progress</button>
+<button class="action-btn text-xs" style="border-color: var(--color-steel-nib); color: white;" onclick="document.getElementById('import-file').click()">Load Progress</button>
+<input type="file" id="import-file" style="display:none" accept=".json" onchange="importProgressFile(event)">
+<button class="action-btn text-xs" style="color: var(--color-wax-red); border-color: var(--color-wax-red);" onclick="if(confirm('Reset all?')){localStorage.clear();location.reload();}">Reset</button>
+</div>
+</nav>
+<main class="main-content">
+<section id="start-page" class="chapter-section active-section">
+<img src="assets/Lecture%20App%20Banner.png" class="hero-banner-flush">
+<div class="p-10 max-w-5xl mx-auto">
+<div class="content-block id-panel">
+<div><label class="block text-xs uppercase text-gold">Full Name</label><input type="text" id="student-name" placeholder="Enter name..."></div>
+<div><label class="block text-xs uppercase text-gold">Period</label><select id="student-period"><option value="">-</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option></select></div>
+<div><label class="block text-xs uppercase text-gold">Date</label><input type="text" id="display-date" readonly></div>
+</div>
+<div class="content-block">
+<h3 class="uppercase text-xs tracking-widest text-gold/80 mb-4">Core Objectives</h3>
+<ul class="list-disc ml-6 mb-8 text-sm text-gray-300">
+<li>Analyze the effectiveness of the War Production Board (WPB) in industrial conversion.</li>
+<li>Evaluate the role of the OSRD in medical and technological wartime breakthroughs.</li>
+<li>Trace the impact of total mobilization on civilian life and shared national sacrifice.</li>
+</ul>
+<h3 class="uppercase text-xs tracking-widest text-gold/80 mb-4">Key Terms</h3>
+<div class="flex flex-wrap mb-10">
+<span class="term-tag">War Production Board (WPB)</span><span class="term-tag">Office of Price Administration (OPA)</span>
+<span class="term-tag">Deficit Spending</span><span class="term-tag">Liberty Ships</span>
+<span class="term-tag">Rationing</span><span class="term-tag">Manhattan Project</span>
+<span class="term-tag">Radar</span><span class="term-tag">Penicillin</span>
+<span class="term-tag">Victory Gardens</span>
+</div>
+<h1>INTRODUCTION</h1>
+<p>In 1940, President Franklin D. Roosevelt issued a historic call to action: the United States must become the "great arsenal of democracy." At the time, the U.S. military ranked eighteenth in the world and the economy was still recovering from the Great Depression. The war, however, did not just coincide with recovery—it caused it.</p>
+<p>Total mobilization transformed America from a Depression-era nation into a global superpower. Through massive deficit spending, industrial conversion of civilian factories, and the coordination of the scientific community, the "war was won on the assembly line before it was won on the battlefield." This application explores the economic, scientific, and social shifts that redefined American life between 1940 and 1945.</p>
+<button class="action-btn w-full mt-4" onclick="validateStartPage()">Begin Application -></button>
+</div>
+</div>
+</section>
+
+<!-- SECTION I: SCENARIOS -->
+<section id="section-1" class="chapter-section">
+<div class="p-10 max-w-5xl mx-auto">
+<div class="content-block">
+<h2>I. Production Scenarios</h2>
+<p>Evaluate the following mobilization challenges. Based on the lecture content, select the most appropriate government response or agency outcome for each scenario.</p>
+<div class="space-y-8 mt-8">
+<div class="p-4 border-l-4 border-gold bg-black/20">
+<label class="font-bold">Scenario 1: Retooling the Auto Plant</label>
+<p class="text-sm italic text-gray-400 mt-1">In February 1942, civilian car production is halted. The government requires thousands of heavy tanks. Which agency has the authority to oversee this conversion?</p>
+<select id="scen-1" class="scenario-select">
+<option value="">Select an option...</option>
+<option>WPB: The War Production Board redirects materials and industry to military needs.</option>
+<option>OPA: The Office of Price Administration freezes the cost of raw steel.</option>
+<option>OSRD: Scientific researchers begin testing new armor-piercing shells.</option>
+<option>Manhattan Project: Secret facilities are built to house the assembly line.</option>
+<option>Liberty Shipyard: Henry Kaiser applies his naval tactics to land vehicles.</option>
+</select>
+</div>
+<div class="p-4 border-l-4 border-gold bg-black/20">
+<label class="font-bold">Scenario 2: Managing the Wage Gap</label>
+<p class="text-sm italic text-gray-400 mt-1">Factory workers are making more money than ever, but civilian goods like meat and coffee are scarce. Inflation threatens to spiral. What is the solution?</p>
+<select id="scen-2" class="scenario-select">
+<option value="">Select an option...</option>
+<option>Deficit Spending: The government prints more money to pay for the surplus.</option>
+<option>OPA Rationing: Distributing coupon books to ensure fair access to scarce goods.</option>
+<option>Scientific Innovation: OSRD develops synthetic coffee and meat replacements.</option>
+<option>Labor Unions: Workers agree to lower their wages to balance the economy.</option>
+<option>Victory Gardens: Families are required to grow 100% of their own produce.</option>
+</select>
+</div>
+<div class="p-4 border-l-4 border-gold bg-black/20">
+<label class="font-bold">Scenario 3: The 4-Day Ship</label>
+<p class="text-sm italic text-gray-400 mt-1">U-boats are sinking Allied tonnage faster than it can be replaced. A breakthrough is needed in cargo ship construction. Who provides it?</p>
+<select id="scen-3" class="scenario-select">
+<option value="">Select an option...</option>
+<option>J. Robert Oppenheimer: Applying atomic physics to propel new vessels.</option>
+<option>Henry J. Kaiser: Using revolutionary assembly-line techniques to build Liberty Ships.</option>
+<option>General Leslie Groves: Building secret shipyards in the Tennessee mountains.</option>
+<option>The OSRD: Inventing a new radar system that makes ships invisible.</option>
+<option>The WPB: Forcing workers to work 24-hour shifts without pay.</option>
+</select>
+</div>
+<div class="p-4 border-l-4 border-gold bg-black/20">
+<label class="font-bold">Scenario 4: The Miracle Drug</label>
+<p class="text-sm italic text-gray-400 mt-1">Allied forces are preparing for D-Day. Planners need a way to prevent mass casualties from infection. What scientific breakthrough is prioritized?</p>
+<select id="scen-4" class="scenario-select">
+<option value="">Select an option...</option>
+<option>Penicillin: Mass-produced through OSRD deep-tank fermentation techniques.</option>
+<option>Radar: Allowing medics to see shrapnel inside soldiers in total darkness.</option>
+<option>Victory Glycerin: Converting waste fats into a new antiseptic spray.</option>
+<option>The Trinity Test: Using radiation to sterilize surgical instruments.</option>
+<option>Deficit Funding: Paying doctors ten times their normal salary to join the army.</option>
+</select>
+</div>
+<div class="p-4 border-l-4 border-gold bg-black/20">
+<label class="font-bold">Scenario 5: The Worker Shortage</label>
+<p class="text-sm italic text-gray-400 mt-1">With 16 million men in the military, the "Arsenal" faces a labor crisis. Who fills the high-paying industrial gap?</p>
+<select id="scen-5" class="scenario-select">
+<option value="">Select an option...</option>
+<option>Drafted Soldiers: Men are pulled from the front lines to work in factories.</option>
+<option>Women and Minorities: New economic opportunities open as barriers are broken.</option>
+<option>Robotic Automation: OSRD develops the first digital factory machines.</option>
+<option>Axis Prisoners: Captives are forced to build American munitions.</option>
+<option>Child Laborers: Community scrap drives are converted into factory schools.</option>
+</select>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION II: MOBILIZATION MATRIX -->
+<section id="section-2" class="chapter-section">
+<div class="p-10 max-w-5xl mx-auto">
+<div class="content-block">
+<h2>II. Mobilization Matrix</h2>
+<p>Compare the two primary facets of the wartime engine: the industrial machine and the scientific laboratory. Explain their roles based on the lecture.</p>
+<div class="matrix-table mt-8">
+<div class="matrix-header">Metric</div>
+<div class="matrix-header">Industrial (WPB/Economic)</div>
+<div class="matrix-header">Scientific (OSRD/Manhattan)</div>
+<div class="matrix-label">Primary Authority</div>
+<div class="matrix-cell"><textarea id="matrix-1-a" class="matrix-input" placeholder="Identify the core agency and its power..."></textarea></div>
+<div class="matrix-cell"><textarea id="matrix-1-b" class="matrix-input" placeholder="Identify the core agency and its mission..."></textarea></div>
+<div class="matrix-label">Key Achievement</div>
+<div class="matrix-cell"><textarea id="matrix-2-a" class="matrix-input" placeholder="Describe a volume production record..."></textarea></div>
+<div class="matrix-cell"><textarea id="matrix-2-b" class="matrix-input" placeholder="Describe a technological breakthrough..."></textarea></div>
+<div class="matrix-label">Social/Strategic Impact</div>
+<div class="matrix-cell"><textarea id="matrix-3-a" class="matrix-input" placeholder="Explain the effect on the Great Depression..."></textarea></div>
+<div class="matrix-cell"><textarea id="matrix-3-b" class="matrix-input" placeholder="Explain the effect on modern medicine or warfare..."></textarea></div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION III: CASE STUDY -->
+<section id="section-3" class="chapter-section">
+<div class="p-10 max-w-5xl mx-auto">
+<div class="content-block">
+<h2>III. Case Study: The Willow Run Wonder</h2>
+<div class="flex items-start gap-6 mt-4">
+<div class="w-16 h-16 shrink-0 bg-gold rounded-full flex items-center justify-center">
+<svg class="w-10 h-10 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+</div>
+<div>
+<p class="italic text-gray-300">1943. At the massive Willow Run plant in Michigan, workers are attempting the impossible. Henry Ford has adapted the moving assembly line to the B-24 Liberator bomber—a machine with over 300,000 parts. Skeptics claim aircraft require hand-crafted precision. Yet, every 63 minutes, a finished bomber rolls off the line. Inside, "Rosie the Riveters" work alongside those who built cars in 1941, fueled by deficit-spending contracts that have ended a decade of unemployment.</p>
+</div>
+</div>
+<div class="mt-8 bg-black/30 p-6 rounded border border-white/10">
+<h4 class="text-gold uppercase text-xs mb-4">Factors of the Industrial Miracle</h4>
+<div class="checklist-item"><input type="checkbox" id="check-1"><label>The application of automotive assembly-line methods to complex aircraft.</label></div>
+<div class="checklist-item"><input type="checkbox" id="check-2"><label>The shift in workforce demographics (women/minorities) to meet demand.</label></div>
+<div class="checklist-item"><input type="checkbox" id="check-3"><label>The role of government-guaranteed "cost-plus" contracts.</label></div>
+<div class="checklist-item"><input type="checkbox" id="check-4"><label>The prioritization of military volume over civilian consumer choice.</label></div>
+</div>
+<h3 class="mt-8">Final Verdict</h3>
+<p>Analyze the Willow Run achievement. Was "Victory through Volume" the most decisive factor in the war? Based on the lecture, explain how this industrial model permanently altered the relationship between American industry and the federal government.</p>
+<textarea id="case-verdict" class="matrix-input" style="min-height: 150px;" placeholder="Write your analysis here..."></textarea>
+</div>
+</div>
+</section>
+
+<!-- SECTION IV: ARSENAL MEMO -->
+<section id="section-4" class="chapter-section">
+<div class="p-10 max-w-5xl mx-auto">
+<div class="content-block">
+<h2>IV. Arsenal Memo: The Military-Industrial Legacy</h2>
+<p>1945. You are an economic advisor drafting the "Post-War Mobilization Report." The war is ending, but the "warfare state" remains active.</p>
+<div class="p-6 bg-white/5 border border-dashed border-gold rounded mt-6">
+<h4 class="text-gold font-bold mb-2">Prompt: The Permanent Shift</h4>
+<p class="text-sm">Draft a memo explaining how total mobilization has transformed the nation into a global superpower. Address: the emergence of the <strong>Military-Industrial Complex</strong>, the legacy of <strong>deficit spending</strong> as an economic tool, and the social catalyst of the "Rosie the Riveter" reality. Explain why American capitalism will never return to its pre-1940 state and how industrial output became a "strategic weapon" for the coming Cold War.</p>
+<textarea id="creative-essay" class="matrix-input mt-4" style="min-height: 300px;" placeholder="Strategic Memorandum: To the Office of the President..."></textarea>
+</div>
+<div class="mt-10 p-6 border-t border-gold text-center">
+<p class="text-sm italic mb-4 text-gray-400">Review all sections. Your progress is saved locally. Clicking "Finish" generates the final archival report.</p>
+<button class="action-btn px-12 py-4 text-xl" onclick="downloadJSON()">Finish & Download Report</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+<script>
+let currentTab = 'start-page';
+const bgImages = ['assets/bg_1.png', 'assets/bg_2.png', 'assets/bg_3.png', 'assets/bg_4.png', 'assets/bg_5.png', 'assets/bg_6.png', 'assets/bg_7.png'];
+function initSlideshow() {
+const container = document.getElementById('bg-slideshow');
+bgImages.forEach(img => {
+const div = document.createElement('div');
+div.className = 'bg-slide';
+div.style.backgroundImage = `url('${img}')`;
+container.appendChild(div);
+});
+const slides = document.querySelectorAll('.bg-slide');
+if (slides.length === 0) return;
+let idx = 0; gsap.set(slides[0], {opacity: 1, scale: 1.1});
+setInterval(() => {
+gsap.to(slides[idx], {opacity: 0, scale: 1, duration: 3});
+idx = (idx + 1) % slides.length;
+gsap.to(slides[idx], {opacity: 1, scale: 1.1, duration: 3});
+}, 10000);
+}
+function switchTab(id) {
+if (id !== 'start-page' && !validateStartPage(true)) return;
+document.querySelectorAll('.chapter-section').forEach(s => s.classList.remove('active-section'));
+document.getElementById(id).classList.add('active-section');
+document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-nav'));
+document.getElementById('nav-' + id).classList.add('active-nav');
+currentTab = id; window.scrollTo({top: 0, behavior: 'smooth'});
+}
+function validateStartPage(silent = false) {
+const name = document.getElementById('student-name').value;
+const period = document.getElementById('student-period').value;
+if (!name || !period) {
+if (!silent) alert("Please enter your Full Name and Period to proceed.");
+return false;
+}
+document.getElementById('student-name').readOnly = true;
+document.getElementById('student-period').disabled = true;
+if (!silent) switchTab('section-1');
+return true;
+}
+function getAppPayload() {
+const data = {
+lecture: "16.1 The Arsenal of Democracy",
+timestamp: new Date().toLocaleString(),
+studentName: document.getElementById('student-name').value,
+studentPeriod: document.getElementById('student-period').value,
+currentTab: currentTab,
+isLocked: document.getElementById('student-name').readOnly,
+responses: {}
+};
+document.querySelectorAll('textarea, select:not(#student-period), input[type="checkbox"]').forEach(el => {
+data.responses[el.id] = el.type === 'checkbox' ? el.checked : el.value;
+});
+return data;
+}
+function applyPayload(data) {
+if(!data) return;
+document.getElementById('student-name').value = data.studentName || "";
+document.getElementById('student-period').value = data.studentPeriod || "";
+if(data.isLocked || (data.studentName && data.studentName.trim() !== "")) {
+document.getElementById('student-name').readOnly = true;
+document.getElementById('student-period').disabled = true;
+}
+if(data.responses) {
+Object.keys(data.responses).forEach(id => {
+const el = document.getElementById(id);
+if(el) {
+if(el.type === 'checkbox') el.checked = data.responses[id];
+else el.value = data.responses[id];
+}
+});
+}
+if(data.currentTab) switchTab(data.currentTab);
+}
+function exportProgressFile() {
+const data = getAppPayload();
+const name = (data.studentName || "Student").replace(/\s+/g, '_');
+const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
+const link = document.createElement('a');
+link.href = URL.createObjectURL(blob);
+link.download = `Progress_Lecture16.1_${name}.json`;
+link.click();
+}
+function importProgressFile(e) {
+const file = e.target.files[0];
+if(!file) return;
+const reader = new FileReader();
+reader.onload = (evt) => {
+try {
+const data = JSON.parse(evt.target.result);
+data.isLocked = true;
+applyPayload(data);
+alert("Progress Restored. Identity has been locked.");
+} catch (err) { alert("Error loading file."); }
+};
+reader.readAsText(file);
+}
+function downloadJSON() {
+const data = getAppPayload();
+if (!data.studentName) { alert("Please enter your name on the first page."); switchTab('start-page'); return; }
+const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
+const a = document.createElement('a');
+a.href = URL.createObjectURL(blob);
+a.download = `Final_Lecture16.1_${data.studentName.replace(/\s+/g, '_')}.json`;
+a.click();
+}
+window.onload = () => { 
+document.getElementById('display-date').value = new Date().toLocaleDateString();
+initSlideshow(); 
+const saved = localStorage.getItem('lecture_16_1_autosave');
+if (saved) { if (confirm("Found autosaved progress. Load it?")) { applyPayload(JSON.parse(saved)); } }
+setInterval(() => { const data = getAppPayload(); localStorage.setItem('lecture_16_1_autosave', JSON.stringify(data)); }, 30000);
+};
+</script>
+</body>
+</html>
