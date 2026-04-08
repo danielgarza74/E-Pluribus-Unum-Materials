@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lecture 15.1 - The Rise of Dictators</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<style>
+/* --- GOLD STANDARD CSS --- */
+:root {
+--color-navy-deep: #20263A; /* Background - Blackout Indigo */
+--color-cream: #F4EBDD; /* Primary Text - Searchlight Ivory */
+--color-navy: #4F6FA3; /* Accent 1 - Siren Blue */
+--color-steel-nib: #7F7A74; /* Accent 2 - Rubble Stone */
+--color-gold: #C45A44; /* Highlight - Ember Red */
+--color-gold-light: #D98E7E;
+--color-wax-red: #A63A3A;
+--font-heading: 'Times New Roman', serif;
+--font-body: 'Arial', sans-serif;
+--font-ui: 'Verdana', sans-serif;
+}
+
+* { box-sizing: border-box; }
+body {
+margin: 0; padding: 0; font-family: var(--font-body);
+background-color: var(--color-navy-deep); color: var(--color-cream);
+line-height: 1.8; font-size: 16px; min-height: 100vh;
+overflow-y: auto; overflow-x: hidden;
+}
+#bg-slideshow {
+position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+z-index: 0; pointer-events: none; background-color: var(--color-navy-deep);
+}
+.bg-slide {
+position: absolute; inset: 0; width: 100%; height: 100%;
+background-size: cover; background-position: center;
+opacity: 0;
+}
+body::after {
+content: ''; position: fixed; inset: 0;
+background: linear-gradient(135deg, rgba(32, 38, 58, 0.85) 0%, rgba(32, 38, 58, 0.65) 50%, rgba(32, 38, 58, 0.85) 100%);
+z-index: 1; pointer-events: none;
+}
+h1, h2, h3, h4 { font-family: var(--font-heading); color: var(--color-gold); }
+h1 { font-size: 3.5rem !important; line-height: 1.1; text-shadow: 0 4px 12px rgba(0,0,0,0.5); margin-bottom: 1rem; }
+h2 { font-size: 2.4rem !important; border-bottom: 1px solid rgba(196, 90, 68, 0.3); padding-bottom: 1rem; margin-bottom: 1.5rem; }
+h3 { font-size: 1.75rem !important; color: var(--color-gold-light); margin-top: 2rem; margin-bottom: 0.5rem; }
+p { margin-bottom: 1.5rem; text-indent: 0; color: #E2E8F0; margin-top: 0; }
+ul, ol { margin-top: 0.5rem; margin-bottom: 1rem; padding-left: 2.5rem; color: #E2E8F0; }
+
+.app-container { display: flex; width: 100vw; min-height: 100vh; position: relative; z-index: 2; }
+
+/* Navigation Panel */
+.side-nav {
+position: fixed; top: 0; left: 0; bottom: 0; width: 280px;
+background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(15px);
+border-right: 1px solid rgba(196, 90, 68, 0.3);
+display: flex; flex-direction: column; padding: 2rem 1.5rem;
+z-index: 100;
+}
+.nav-title {
+font-family: var(--font-heading); color: var(--color-gold);
+font-size: 1.5rem; margin-top: 0;
+border-bottom: 1px solid rgba(196, 90, 68, 0.3);
+padding-bottom: 1rem; margin-bottom: 1.5rem; text-align: center;
+}
+.nav-links { flex: 1; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; }
+.nav-btn {
+background: transparent; border: 1px solid transparent; color: var(--color-cream);
+text-align: left; padding: 12px 15px; font-family: var(--font-ui); font-size: 0.85rem;
+cursor: pointer; transition: all 0.3s; border-radius: 4px;
+}
+.nav-btn:hover, .nav-btn.active-nav {
+background: rgba(196, 90, 68, 0.15); border: 1px solid var(--color-gold); color: var(--color-gold);
+}
+.nav-actions {
+display: flex; flex-direction: column; gap: 10px; margin-top: 20px;
+border-top: 1px solid rgba(196, 90, 68, 0.3); padding-top: 20px;
+}
+
+/* Main Content Offset */
+.main-content { flex: 1; margin-left: 280px; min-height: 100vh; }
+.hero-banner-flush {
+width: 100%; height: auto; display: block; margin: 0; object-fit: contain;
+border-bottom: 2px solid var(--color-gold);
+}
+.content-wrapper { max-width: calc(900px + 15ch); margin: 0 auto; padding: 40px; }
+
+.content-block {
+background: rgba(32, 38, 58, 0.35); backdrop-filter: blur(15px);
+border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px;
+padding: 2.5rem; margin-bottom: 2rem;
+}
+.id-panel {
+display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 15px; margin-bottom: 2rem;
+padding: 1.5rem; background: rgba(255,255,255,0.05); border: 1px solid var(--color-gold); border-radius: 6px;
+}
+.id-panel input, .id-panel select {
+width: 100%; padding: 10px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.2);
+color: var(--color-cream); border-radius: 4px; font-family: var(--font-ui);
+}
+.id-panel input[readonly] { background: rgba(196, 90, 68, 0.1); border-color: var(--color-gold); cursor: not-allowed; }
+.id-panel label { display: block; font-family: var(--font-ui); font-size: 0.8rem; color: var(--color-gold); margin-bottom: 5px; text-transform: uppercase; }
+
+.bottom-bar, .action-bar {
+display: flex; flex-wrap: wrap; gap: 15px; margin-top: 3rem; padding: 1.5rem;
+border-top: 1px solid rgba(196, 90, 68, 0.3); background: rgba(0,0,0,0.3); border-radius: 8px; align-items: center; justify-content: space-between;
+}
+.action-bar { margin-top: 2rem; justify-content: center; }
+.action-btn {
+padding: 15px 20px; border-radius: 4px; font-family: var(--font-ui); font-weight: bold; cursor: pointer; text-transform: uppercase;
+transition: all 0.3s ease; text-align: center; flex: 1; min-width: 140px; font-size: 0.9rem;
+background: rgba(0,0,0,0.4); color: var(--color-gold); border: 1px solid var(--color-gold);
+}
+.action-btn:hover { background: var(--color-gold); color: var(--color-navy-deep); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(196, 90, 68, 0.3); }
+
+.chapter-section { display: none; animation: fadeIn 0.6s ease-out; }
+.chapter-section.active-section { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+textarea.dark-input {
+width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--color-steel-nib);
+color: var(--color-cream); padding: 1rem; border-radius: 4px; font-family: var(--font-body); resize: vertical; min-height: 100px; margin-top: 0.5rem;
+}
+textarea.matrix-input {
+width: 100%; background: #ffffff; border: 2px solid var(--color-steel-nib);
+color: #000000; padding: 0.75rem; border-radius: 4px; font-family: var(--font-body); resize: vertical; min-height: 80px; font-weight: 500;
+}
+.scenario-select {
+width: 100%; padding: 12px; background: rgba(0,0,0,0.5); border: 1px solid var(--color-gold);
+color: var(--color-cream); border-radius: 4px; font-family: var(--font-ui); margin-top: 1rem; cursor: pointer;
+}
+.matrix-grid {
+display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;
+}
+.matrix-card { background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); }
+
+.case-study-container {
+display: flex; gap: 2rem; background: rgba(0,0,0,0.2); padding: 2rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); margin-top: 1.5rem; align-items: center;
+}
+.case-svg { flex: 0 0 120px; }
+.case-text { flex: 1; }
+.checklist-container label {
+display: block; padding: 0.8rem; margin-bottom: 0.5rem; background: rgba(255,255,255,0.05); border-radius: 4px; cursor: pointer; border: 1px solid transparent; transition: border 0.2s;
+}
+.checklist-container label:hover { border: 1px solid var(--color-gold); }
+.checklist-container input[type="checkbox"] { margin-right: 15px; transform: scale(1.3); accent-color: var(--color-gold); }
+</style>
+</head>
+<body>
+<div id="bg-slideshow"></div>
+<input type="file" id="load-file-input" style="display:none" onchange="handleFileSelect(event)" accept=".json">
+
+<div class="app-container">
+    <nav id="side-nav" class="side-nav">
+        <h2 class="nav-title">Table of Contents</h2>
+        <div class="nav-links">
+            <button class="nav-btn active-nav" onclick="switchTab('start-page')" id="nav-start-page">Introduction</button>
+            <button class="nav-btn" onclick="switchTab('section-1')" id="nav-section-1">I. Scenarios</button>
+            <button class="nav-btn" onclick="switchTab('section-2')" id="nav-section-2">II. Conceptual Matrix</button>
+            <button class="nav-btn" onclick="switchTab('section-3')" id="nav-section-3">III. Case Study</button>
+            <button class="nav-btn" onclick="switchTab('section-4')" id="nav-section-4">IV. Creative Application</button>
+        </div>
+        <div class="nav-actions">
+            <button class="action-btn" onclick="saveProgressFile()" style="width: 100%;">Save Progress (File)</button>
+            <button class="action-btn" onclick="document.getElementById('load-file-input').click()" style="width: 100%; border-color: var(--color-navy); color: var(--color-cream); background: rgba(79, 111, 163, 0.1);">Load Progress (File)</button>
+            <button class="action-btn" onclick="if(confirm('Are you sure you want to reset all progress?')){localStorage.clear();location.reload();}" style="width: 100%; border-color: var(--color-wax-red); color: var(--color-wax-red); background: rgba(166, 58, 58, 0.1);">Reset App</button>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <!-- START PAGE -->
+        <section id="start-page" class="chapter-section active-section">
+            <img src="assets/Lecture%20App%20Banner.png" alt="Lecture Hero Banner" class="hero-banner-flush">
+            <div class="content-wrapper">
+                <div class="content-block id-panel">
+                    <div><label>Full Name</label><input type="text" id="student-name" placeholder="Enter Name"></div>
+                    <div><label>Period</label>
+                        <select id="student-period">
+                            <option value="">Select</option>
+                            <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                            <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+                            <option value="7">7</option>
+                        </select>
+                    </div>
+                    <div><label>Date</label><input type="text" id="display-date" readonly placeholder="Auto-filled on Download" style="opacity: 0.7; cursor: default;"></div>
+                </div>
+
+                <div class="content-block">
+                    <h3>Key Terms</h3>
+                    <ul class="grid grid-cols-2 gap-2 text-sm">
+                        <li>Totalitarianism</li>
+                        <li>Fascism</li>
+                        <li>Adolf Hitler</li>
+                        <li>Benito Mussolini</li>
+                        <li>Joseph Stalin</li>
+                        <li>Hideki Tojo</li>
+                        <li>Appeasement</li>
+                        <li>Munich Pact</li>
+                        <li>Blitzkrieg</li>
+                        <li>League of Nations</li>
+                    </ul>
+
+                    <h3>Core Objectives</h3>
+                    <ul>
+                        <li><strong>Trace</strong> how economic instability and political extremism led to the emergence of totalitarian regimes.</li>
+                        <li><strong>Evaluate</strong> the collapse of collective security and the failure of the policy of appeasement.</li>
+                        <li><strong>Analyze</strong> the effectiveness of German Blitzkrieg tactics in the early stages of World War II.</li>
+                    </ul>
+
+                    <h2>Introduction</h2>
+                    <p>The interwar period was marked by profound fragility. The scars of World War I, combined with the global economic devastation of the Great Depression, created a vacuum of power and hope. In this environment, democratic institutions faltered, and radical strongmen emerged across Europe and Asia. These dictators promised national resurrection, economic stability, and strict social order—but at the cost of absolute obedience and the systematic destruction of individual liberties. This lecture examines the structural roots of this instability and the catastrophic diplomatic failures that led the world back to the brink of global conflict.</p>
+
+                    <div class="action-bar">
+                        <button class="action-btn" onclick="validateStartPage()">BEGIN ASSIGNMENT -></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION I: SCENARIOS -->
+        <section id="section-1" class="chapter-section">
+            <div class="content-wrapper">
+                <div class="content-block">
+                    <h2>Section I - Scenarios</h2>
+                    <p>Read each scenario below based on historical trends of the 1930s and select the lecture concept that best applies.</p>
+
+                    <div class="mt-8 space-y-8">
+                        <div>
+                            <h4 class="text-xl font-bold text-white mb-2">Scenario 1</h4>
+                            <p>A nation is crippled by hyperinflation and 30% unemployment. A charismatic leader holds massive rallies, blaming ethnic minorities and foreign powers for the country's "humiliation," and promises a 1,000-year era of national glory.</p>
+                            <select id="scenario_1" class="scenario-select">
+                                <option value="">-- Select Concept --</option>
+                                <option value="appeasement">Appeasement</option>
+                                <option value="totalitarianism">Totalitarianism / Rise of Extremism</option>
+                                <option value="blitzkrieg">Blitzkrieg Tactics</option>
+                                <option value="neutrality">Isolationism</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <h4 class="text-xl font-bold text-white mb-2">Scenario 2</h4>
+                            <p>An international organization issues a formal "reprimand" after a major power invades a resource-rich neighboring territory. However, the organization has no military and refuses to impose meaningful trade sanctions, allowing the invasion to stand.</p>
+                            <select id="scenario_2" class="scenario-select">
+                                <option value="">-- Select Concept --</option>
+                                <option value="collective_security_failure">Failure of Collective Security (League of Nations)</option>
+                                <option value="collectivization">Stalinist Collectivization</option>
+                                <option value="lebensraum">Lebensraum</option>
+                                <option value="fascism">Fascist Revolution</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <h4 class="text-xl font-bold text-white mb-2">Scenario 3</h4>
+                            <p>A prime minister returns from a high-stakes diplomatic meeting, waving a signed paper and declaring he has secured "peace for our time" by allowing a dictator to keep territory he already invaded, hoping the dictator's hunger is satisfied.</p>
+                            <select id="scenario_3" class="scenario-select">
+                                <option value="">-- Select Concept --</option>
+                                <option value="blitzkrieg">Blitzkrieg</option>
+                                <option value="great_purge">The Great Purge</option>
+                                <option value="appeasement">Appeasement (Munich Pact)</option>
+                                <option value="militarism">Militarism</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <h4 class="text-xl font-bold text-white mb-2">Scenario 4</h4>
+                            <p>A military force utilizes coordinated radio communication, fast-moving armored tank divisions, and precision dive-bombers to overwhelm a border defense in days, bypassing heavy stationary fortifications entirely.</p>
+                            <select id="scenario_4" class="scenario-select">
+                                <option value="">-- Select Concept --</option>
+                                <option value="blitzkrieg">Blitzkrieg (Lightning War)</option>
+                                <option value="trench_warfare">Trench Warfare</option>
+                                <option value="collectivization">Collectivization</option>
+                                <option value="appeasement">Appeasement</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <h4 class="text-xl font-bold text-white mb-2">Scenario 5</h4>
+                            <p>A government takes absolute control over all newspapers, schools, and radio stations. Every citizen is required to display the state's symbol, and a secret police force arrests anyone suspected of "disloyalty" to the state's vision.</p>
+                            <select id="scenario_5" class="scenario-select">
+                                <option value="">-- Select Concept --</option>
+                                <option value="democracy">Liberal Democracy</option>
+                                <option value="totalitarianism">Totalitarianism / State Control</option>
+                                <option value="isolationism">Neutrality Acts</option>
+                                <option value="economic_recovery">Laissez-Faire Economics</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="bottom-bar">
+                        <div class="side-action left"><button class="action-btn" onclick="switchTab('start-page')">← Back</button></div>
+                        <div class="center-actions"></div>
+                        <div class="side-action right"><button class="action-btn" onclick="switchTab('section-2')">Next →</button></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION II: CONCEPTUAL MATRIX -->
+        <section id="section-2" class="chapter-section">
+            <div class="content-wrapper">
+                <div class="content-block">
+                    <h2>Section II - Conceptual Matrix</h2>
+                    <p>Compare the three major totalitarian ideologies of the 1930s based on the lecture material. Describe their core methods of maintaining power and their primary goals.</p>
+
+                    <div class="matrix-grid">
+                        <div class="matrix-card">
+                            <h3 style="margin-top:0;">Stalinism (USSR)</h3>
+                            <label class="text-xs text-slate-400 uppercase tracking-widest mb-1 block">Economic Strategy</label>
+                            <textarea id="matrix_stalin_econ" class="matrix-input" placeholder="How did Stalin transform the economy? (e.g., 5-Year Plans)"></textarea>
+                            <label class="text-xs text-slate-400 uppercase tracking-widest mt-4 mb-1 block">Methods of Control</label>
+                            <textarea id="matrix_stalin_control" class="matrix-input" placeholder="How was dissent handled? (e.g., The Great Purge)"></textarea>
+                        </div>
+
+                        <div class="matrix-card">
+                            <h3 style="margin-top:0;">Fascism (Italy)</h3>
+                            <label class="text-xs text-slate-400 uppercase tracking-widest mb-1 block">Core Philosophy</label>
+                            <textarea id="matrix_mussolini_phi" class="matrix-input" placeholder="What were the central beliefs of Fascism?"></textarea>
+                            <label class="text-xs text-slate-400 uppercase tracking-widest mt-4 mb-1 block">Path to Power</label>
+                            <textarea id="matrix_mussolini_power" class="matrix-input" placeholder="How did Mussolini take control? (e.g., March on Rome)"></textarea>
+                        </div>
+
+                        <div class="matrix-card">
+                            <h3 style="margin-top:0;">Nazism (Germany)</h3>
+                            <label class="text-xs text-slate-400 uppercase tracking-widest mb-1 block">Racial Ideology</label>
+                            <textarea id="matrix_hitler_race" class="matrix-input" placeholder="What theories were outlined in Mein Kampf?"></textarea>
+                            <label class="text-xs text-slate-400 uppercase tracking-widest mt-4 mb-1 block">Expansionist Goals</label>
+                            <textarea id="matrix_hitler_expand" class="matrix-input" placeholder="What was Lebensraum?"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="bottom-bar">
+                        <div class="side-action left"><button class="action-btn" onclick="switchTab('section-1')">← Back</button></div>
+                        <div class="center-actions"></div>
+                        <div class="side-action right"><button class="action-btn" onclick="switchTab('section-3')">Next →</button></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION III: CASE STUDY -->
+        <section id="section-3" class="chapter-section">
+            <div class="content-wrapper">
+                <div class="content-block">
+                    <h2>Section III - Case Study</h2>
+                    <div class="case-study-container">
+                        <div class="case-svg">
+                            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="50" cy="50" r="45" stroke="#C45A44" stroke-width="2"/>
+                                <path d="M30 70L50 30L70 70H30Z" fill="#C45A44" fill-opacity="0.3" stroke="#C45A44" stroke-width="2"/>
+                                <rect x="45" y="55" width="10" height="20" fill="#C45A44"/>
+                                <path d="M20 50H80M50 20V80" stroke="#7F7A74" stroke-width="1" stroke-dasharray="2 2"/>
+                            </svg>
+                        </div>
+                        <div class="case-text">
+                            <p class="text-white italic">In March 1936, Hitler ordered German troops to re-enter the Rhineland, a region demilitarized by the Treaty of Versailles. Generals warned Hitler that France could easily crush them. However, France, fearing another war, did nothing. Britain viewed the move as Germany simply "walking into its own backyard."</p>
+                        </div>
+                    </div>
+
+                    <h3 style="margin-top:2rem;">Evaluation Checklist</h3>
+                    <p class="mb-4">Check all that apply to this specific historical event:</p>
+                    <div class="checklist-container">
+                        <label><input type="checkbox" id="check_versailles"> Violation of the Treaty of Versailles</label>
+                        <label><input type="checkbox" id="check_appeasement"> Early example of British and French Appeasement</label>
+                        <label><input type="checkbox" id="check_collective"> Evidence that Collective Security was functioning well</label>
+                        <label><input type="checkbox" id="check_embolden"> Act that emboldened future German aggression</label>
+                        <label><input type="checkbox" id="check_league"> Successful intervention by the League of Nations</label>
+                    </div>
+
+                    <h3 style="margin-top:2rem;">Final Verdict</h3>
+                    <p>How did the Rhineland remilitarization serve as a "testing ground" for both the Axis powers and the Western democracies?</p>
+                    <textarea id="case_verdict" class="dark-input" placeholder="Analyze the strategic and psychological impact of this event..."></textarea>
+
+                    <div class="bottom-bar">
+                        <div class="side-action left"><button class="action-btn" onclick="switchTab('section-2')">← Back</button></div>
+                        <div class="center-actions"></div>
+                        <div class="side-action right"><button class="action-btn" onclick="switchTab('section-4')">Next →</button></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION IV: CREATIVE APPLICATION -->
+        <section id="section-4" class="chapter-section">
+            <div class="content-wrapper">
+                <div class="content-block">
+                    <h2>Section IV - Creative Application</h2>
+                    <p class="text-white font-bold text-lg mb-4">Advisory Memo: September 1938</p>
+                    <p>You are a senior diplomatic advisor to British Prime Minister Neville Chamberlain. You have just arrived at the Munich Conference. Hitler is demanding the Sudetenland from Czechoslovakia. Chamberlain is inclined to agree to prevent war.</p>
+                    <p class="mt-4">Write a brief advisory memo (approx. 200 words) explaining why you either <strong>support</strong> his plan for appeasement or why you <strong>strongly oppose</strong> it. Use specific concepts from the lecture (e.g., collective security, Axis expansion, Treaty of Versailles) to justify your position.</p>
+
+                    <textarea id="creative_app" class="dark-input" style="min-height: 350px;" placeholder="TO: Prime Minister Chamberlain&#10;RE: The Sudetenland Crisis&#10;&#10;Mr. Prime Minister, I believe..."></textarea>
+
+                    <div class="bottom-bar">
+                        <div class="side-action left"><button class="action-btn" onclick="switchTab('section-3')">← Back</button></div>
+                        <div class="center-actions">
+                            <button class="action-btn" onclick="downloadJSON()" style="background: var(--color-gold); color: var(--color-navy-deep);">Finished</button>
+                        </div>
+                        <div class="side-action right"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script>
+let currentTab = 'start-page';
+let studentName = "";
+let studentPeriod = "";
+const bgImages = ['assets/bg_1.png', 'assets/bg_2.png', 'assets/bg_3.png', 'assets/bg_4.png'];
+
+window.onload = function() {
+    initSlideshow();
+};
+
+function initSlideshow() {
+    const container = document.getElementById('bg-slideshow');
+    bgImages.forEach((img) => {
+        const div = document.createElement('div');
+        div.className = 'bg-slide';
+        div.style.backgroundImage = `url('${img}')`;
+        container.appendChild(div);
+    });
+    const slides = document.querySelectorAll('.bg-slide');
+    let currentSlide = 0;
+    if (slides.length === 0) return;
+    gsap.set(slides[0], { opacity: 1 });
+    function nextSlide() {
+        let next = (currentSlide + 1) % slides.length;
+        gsap.to(slides[currentSlide], { opacity: 0, duration: 2 });
+        gsap.to(slides[next], { opacity: 1, duration: 2 });
+        currentSlide = next;
+    }
+    setInterval(nextSlide, 8000);
+}
+
+function validateStartPage() {
+    let name = document.getElementById('student-name').value;
+    let period = document.getElementById('student-period').value;
+    if (name.trim().toUpperCase() === "RUNNING TEST") {
+        studentName = "TEST USER"; studentPeriod = "1"; switchTab('section-1'); return;
+    }
+    if (!name || !period) { alert("Please enter your Name and Period."); return; }
+    studentName = name; studentPeriod = period;
+    switchTab('section-1');
+}
+
+function switchTab(id) {
+    document.querySelectorAll('.chapter-section').forEach(s => {
+        s.classList.remove('active-section'); s.style.display = 'none';
+    });
+    const target = document.getElementById(id);
+    target.style.display = 'block';
+    setTimeout(() => target.classList.add('active-section'), 10);
+    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active-nav'));
+    const activeBtn = document.getElementById('nav-' + id);
+    if(activeBtn) activeBtn.classList.add('active-nav');
+    currentTab = id; window.scrollTo(0,0);
+}
+
+function saveProgressFile() {
+    const name = document.getElementById('student-name').value.trim();
+    if (!name) {
+        alert("CRITICAL: You must enter your FULL NAME in the Introduction tab before you can save your progress.");
+        switchTab('start-page');
+        return;
+    }
+
+    const data = {
+        meta: {
+            studentName: name,
+            studentPeriod: document.getElementById('student-period').value,
+            currentTab: currentTab,
+            timestamp: new Date().toLocaleString()
+        },
+        inputs: {}
+    };
+
+    document.querySelectorAll('textarea, select:not(#student-period), input[type="checkbox"]').forEach(el => {
+        if (el.type === 'checkbox') {
+            data.inputs[el.id] = el.checked;
+        } else {
+            data.inputs[el.id] = el.value;
+        }
+    });
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `Progress_Lecture15_1_${name.replace(/\s+/g, '_')}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+function handleFileSelect(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const data = JSON.parse(e.target.result);
+            
+            if (data.meta && data.meta.studentName) {
+                const nameInput = document.getElementById('student-name');
+                nameInput.value = data.meta.studentName;
+                nameInput.readOnly = true; 
+                
+                document.getElementById('student-period').value = data.meta.studentPeriod || "";
+            }
+
+            if (data.inputs) {
+                Object.keys(data.inputs).forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        if (el.type === 'checkbox') {
+                            el.checked = data.inputs[id];
+                        } else {
+                            el.value = data.inputs[id];
+                        }
+                    }
+                });
+            }
+
+            if (data.meta.currentTab && document.getElementById(data.meta.currentTab)) {
+                switchTab(data.meta.currentTab);
+            }
+
+            alert("Progress successfully loaded. Your name is now locked to this assignment.");
+        } catch (err) {
+            console.error(err);
+            alert("Error loading file. Please ensure it is a valid progress JSON.");
+        }
+        event.target.value = '';
+    };
+    reader.readAsText(file);
+}
+
+function downloadJSON() {
+    const nameRaw = (document.getElementById('student-name')?.value || "").trim();
+    if (!nameRaw) {
+        alert("Please enter your name before finishing.");
+        switchTab('start-page');
+        return;
+    }
+    
+    const dateStr = new Date().toLocaleDateString();
+    const period = (document.getElementById('student-period')?.value || "").trim();
+    const cleanName = nameRaw.replace(/\s+/g, '_');
+    
+    const payload = {
+        meta: {
+            title: document.title,
+            studentName: nameRaw,
+            period: period,
+            date: dateStr,
+            status: "FINISHED"
+        },
+        responses: {},
+        scoring: {
+            scenarios: {
+                s1: document.getElementById('scenario_1').value === 'totalitarianism',
+                s2: document.getElementById('scenario_2').value === 'collective_security_failure',
+                s3: document.getElementById('scenario_3').value === 'appeasement',
+                s4: document.getElementById('scenario_4').value === 'blitzkrieg',
+                s5: document.getElementById('scenario_5').value === 'totalitarianism'
+            },
+            case_study_flags: {
+                correct_checked: document.getElementById('check_versailles').checked && 
+                                 document.getElementById('check_appeasement').checked && 
+                                 document.getElementById('check_embolden').checked,
+                incorrect_checked: document.getElementById('check_collective').checked || 
+                                   document.getElementById('check_league').checked
+            }
+        }
+    };
+
+    document.querySelectorAll('textarea, select:not(#student-period), input[type="checkbox"]').forEach(el => {
+        if (el.type === 'checkbox') { payload.responses[el.id] = el.checked; } 
+        else { payload.responses[el.id] = el.value; }
+    });
+
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `FINAL_Lecture15_1_${cleanName}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+</script>
+</body>
+</html>
