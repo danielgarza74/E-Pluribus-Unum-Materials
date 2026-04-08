@@ -1,0 +1,32 @@
+Technical Guide: Updating the E Pluribus Unum HubThis guide explains how to add new Units, Chapters, and Sections to your main index.html file while maintaining the "American Heritage" aesthetic.1. The Anatomy of a UnitEvery Unit is contained within a div with the class unit-card. To add a new Unit, copy a previous Unit block and update the title and subtitle.<!-- START OF UNIT BLOCK -->
+<div class="unit-card">
+    <h2 class="text-3xl mb-2" style="color: var(--color-gold);">Unit X | [Unit Title]</h2>
+    <p class="text-slate-400 mb-6 border-b border-white/10 pb-4 italic">[Unit Inquiry Question?]</p>
+    
+    <div class="chapter-grid">
+        <!-- CHAPTER BOXES GO HERE -->
+    </div>
+</div>
+<!-- END OF UNIT BLOCK -->
+2. Adding a ChapterInside the chapter-grid of a Unit, you place chapter-box elements. The grid is responsive and will automatically create new rows as you add more chapters.To add a Chapter:Copy an existing <div class="chapter-box"> block.Paste it inside the <div class="chapter-grid"> of the correct Unit.Change the <h3> text to your new Chapter title.3. Adding a Subsection (e.g., 15.2)Inside a Chapter, each subsection is contained in a section-container. This keeps the three assignment types grouped together visually.To add a Section:Copy this snippet and paste it inside a chapter-box:<div class="section-container">
+    <h4 class="text-sm font-bold text-slate-400 mb-2">X.X | [Section Title]</h4>
+    
+    <!-- Lecture App Link -->
+    <a href="Unit-X/Chapter-X.X/Lecture-App/index.html" class="assignment-link">
+        <div><span class="badge badge-lecture">LECTURE APPLICATION</span></div>
+    </a>
+    
+    <!-- Quiz Review Link -->
+    <a href="Unit-X/Chapter-X.X/Quiz-Review/index.html" class="assignment-link">
+        <div><span class="badge badge-review">QUIZ REVIEW</span></div>
+    </a>
+    
+    <!-- Section Quiz Link -->
+    <a href="Unit-X/Chapter-X.X/Section-Quiz/index.html" class="assignment-link">
+        <div><span class="badge badge-quiz">SECTION QUIZ</span></div>
+    </a>
+</div>
+4. Crucial Checklist for LinksWhen you update the href (the link) for an assignment, ensure it follows your "Clean URL" folder structure precisely:Unit Folder: Must match exactly (e.g., Unit-5).Subsection Folder: Must match exactly (e.g., Chapter-15.1).Type Folder: Must be Lecture-App, Quiz-Review, or Section-Quiz.Filename: Because you are naming every file index.html, the link should always end in /index.html.5. Visual PlaceholdersIf you have a Unit planned but haven't built the files yet, you can wrap the unit-card in the following classes to make it appear "greyed out":<div class="opacity-40 grayscale pointer-events-none">
+    <!-- Insert unit-card here -->
+</div>
+6. Pro-Tip: Searching the CodeUse Ctrl+F (Windows) or Cmd+F (Mac) inside your text editor to quickly find the end of a Chapter or Unit. Search for keywords like <!-- Chapter 16 --> or unit-card to orient yourself before pasting new code.
