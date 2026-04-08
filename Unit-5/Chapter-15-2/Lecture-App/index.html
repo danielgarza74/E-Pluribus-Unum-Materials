@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 15.2: From Isolation to War</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        :root {
+            --color-navy-deep: #20263A;
+            --color-cream: #F4EBDD;
+            --color-navy: #4F6FA3;
+            --color-steel-nib: #7F7A74;
+            --color-gold: #C45A44;
+            --color-wax-red: #8B0000;
+            --font-heading: 'Times New Roman', serif;
+            --font-body: 'Arial', sans-serif;
+            --font-ui: 'Verdana', sans-serif;
+        }
+
+        body { 
+            margin: 0; 
+            background-color: var(--color-navy-deep); 
+            color: var(--color-cream); 
+            font-family: var(--font-body); 
+            line-height: 1.8; 
+            overflow-x: hidden;
+        }
+
+        #bg-slideshow { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+        .bg-slide { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; transition: transform 10s linear; }
+        body::after { content: ''; position: fixed; inset: 0; background: linear-gradient(135deg, rgba(32, 38, 58, 0.9) 0%, rgba(32, 38, 58, 0.6) 100%); z-index: 1; pointer-events: none; }
+
+        .app-container { display: flex; position: relative; z-index: 2; min-height: 100vh; }
+
+        /* Navigation */
+        .side-nav { 
+            position: fixed; 
+            width: 280px; 
+            height: 100vh; 
+            background: rgba(15, 18, 28, 0.85); 
+            backdrop-filter: blur(15px); 
+            border-right: 1px solid rgba(255,255,255,0.1); 
+            padding: 2rem; 
+            display: flex; 
+            flex-direction: column; 
+        }
+        .nav-title { font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 1rem; color: var(--color-gold); border-bottom: 1px solid var(--color-gold); padding-bottom: 0.5rem; }
+        .nav-links { flex: 1; display: flex; flex-direction: column; gap: 10px; margin-top: 1rem; }
+        .nav-btn { background: transparent; border: 1px solid transparent; color: var(--color-cream); text-align: left; padding: 12px; border-radius: 4px; cursor: pointer; transition: 0.3s; font-family: var(--font-ui); font-size: 0.9rem; text-transform: uppercase; }
+        .nav-btn.active-nav, .nav-btn:hover { background: rgba(255,255,255,0.05); border-color: var(--color-gold); color: var(--color-gold); }
+
+        /* Content Area */
+        .main-content { flex: 1; margin-left: 280px; width: calc(100% - 280px); }
+        .hero-banner-flush { width: 100%; height: auto; display: block; object-fit: contain; border-bottom: 3px solid var(--color-gold); }
+        .content-block { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); padding: 2.5rem; border-radius: 8px; margin-bottom: 2rem; border: 1px solid rgba(255,255,255,0.05); }
+
+        /* Typography - No Indentation */
+        h1, h2, h3 { font-family: var(--font-heading); color: var(--color-gold); margin-top: 0; }
+        p { text-indent: 0 !important; margin-bottom: 1.5rem; text-align: left; }
+
+        /* UI Elements */
+        .id-panel { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 15px; border: 1px solid var(--color-gold); padding: 1.5rem; margin-bottom: 2rem; }
+        .id-panel label { font-family: var(--font-ui); font-weight: bold; }
+        .id-panel input, .id-panel select { background: rgba(0,0,0,0.4); color: white; padding: 10px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); width: 100%; }
+        .id-panel input[readonly], .id-panel select[disabled] { background: rgba(196, 90, 68, 0.1); border-color: var(--color-gold); cursor: not-allowed; }
+
+        .action-btn { background: rgba(0,0,0,0.4); border: 1px solid var(--color-gold); color: var(--color-gold); padding: 12px; border-radius: 4px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; font-family: var(--font-ui); }
+        .action-btn:hover { background: var(--color-gold); color: white; }
+
+        textarea { background: white; color: black; width: 100%; padding: 12px; border-radius: 4px; border: 2px solid var(--color-steel-nib); font-family: var(--font-body); }
+        select.scenario-select { background: white; color: black; width: 100%; padding: 10px; border-radius: 4px; margin-top: 10px; border: 2px solid var(--color-navy); }
+
+        .matrix-table { display: grid; grid-template-columns: 1fr 2fr 2fr; gap: 1px; background: var(--color-steel-nib); border: 1px solid var(--color-steel-nib); }
+        .matrix-header { background: var(--color-navy); color: white; padding: 15px; font-weight: bold; text-align: center; }
+        .matrix-cell { background: rgba(255,255,255,0.05); padding: 15px; display: flex; align-items: center; justify-content: center; }
+        .matrix-label { background: rgba(0,0,0,0.3); color: var(--color-gold); font-weight: bold; padding: 15px; }
+
+        .chapter-section { display: none; animation: fadeIn 0.6s ease-out; }
+        .active-section { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .checklist-item { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 4px; }
+        .checklist-item input { transform: scale(1.3); margin-top: 6px; accent-color: var(--color-gold); }
+
+        .term-tag { display: inline-block; background: var(--color-navy); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.85rem; margin-right: 5px; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+
+<div id="bg-slideshow"></div>
+
+<div class="app-container">
+    <nav class="side-nav">
+        <h2 class="nav-title">Table of Contents</h2>
+        <div class="nav-links">
+            <button class="nav-btn active-nav" onclick="switchTab('start-page')" id="nav-start-page">INTRODUCTION</button>
+            <button class="nav-btn" onclick="switchTab('section-1')" id="nav-section-1">I. POLICY SCENARIOS</button>
+            <button class="nav-btn" onclick="switchTab('section-2')" id="nav-section-2">II. TRANSITION MATRIX</button>
+            <button class="nav-btn" onclick="switchTab('section-3')" id="nav-section-3">III. CASE STUDY: RETOOLING</button>
+            <button class="nav-btn" onclick="switchTab('section-4')" id="nav-section-4">IV. CREATIVE STRATEGY</button>
+        </div>
+        
+        <div class="nav-actions flex flex-col gap-2 mt-auto">
+            <button class="action-btn text-xs" onclick="exportProgressFile()">Save Progress</button>
+            <button class="action-btn text-xs" style="border-color: var(--color-steel-nib); color: white;" onclick="document.getElementById('import-file').click()">Load Progress</button>
+            <input type="file" id="import-file" style="display:none" accept=".json" onchange="importProgressFile(event)">
+            <button class="action-btn text-xs" style="color: var(--color-wax-red); border-color: var(--color-wax-red);" onclick="if(confirm('Reset all progress?')){localStorage.clear();location.reload();}">Reset</button>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <!-- START PAGE -->
+        <section id="start-page" class="chapter-section active-section">
+            <img src="assets/Lecture%20App%20Banner.png" class="hero-banner-flush" alt="Banner">
+            <div class="p-10 max-w-5xl mx-auto">
+                <div class="content-block id-panel">
+                    <div>
+                        <label class="block text-xs uppercase text-gold">Full Name</label>
+                        <input type="text" id="student-name" placeholder="Enter name...">
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase text-gold">Period</label>
+                        <select id="student-period">
+                            <option value="">-</option>
+                            <option>1</option><option>2</option><option>3</option><option>4</option>
+                            <option>5</option><option>6</option><option>7</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase text-gold">Date</label>
+                        <input type="text" id="display-date" readonly>
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <h3 class="mt-2 mb-4 uppercase text-xs tracking-widest text-gold/80">Core Objectives</h3>
+                    <ul class="list-disc ml-6 mb-8 text-sm text-gray-300">
+                        <li>Trace the evolution of U.S. policy from the Neutrality Acts to the Atlantic Charter.</li>
+                        <li>Analyze the impact of the Pearl Harbor attack on American national unity.</li>
+                        <li>Compare the strategic goals of the "Big Three" within the Grand Alliance.</li>
+                    </ul>
+
+                    <h3 class="mb-4 uppercase text-xs tracking-widest text-gold/80">Key Terms</h3>
+                    <div class="flex flex-wrap mb-10">
+                        <span class="term-tag">Isolationism</span>
+                        <span class="term-tag">America First Committee</span>
+                        <span class="term-tag">Cash and Carry</span>
+                        <span class="term-tag">Lend-Lease Act</span>
+                        <span class="term-tag">Arsenal of Democracy</span>
+                        <span class="term-tag">Atlantic Charter</span>
+                        <span class="term-tag">Four Freedoms</span>
+                        <span class="term-tag">Pearl Harbor</span>
+                        <span class="term-tag">Embargo</span>
+                    </div>
+
+                    <h1>INTRODUCTION</h1>
+                    <p>The transition of the United States from a policy of strict isolationism to global leadership was not a sudden leap, but a calculated and contested evolution. Spurred by the trauma of World War I and the economic devastation of the Great Depression, many Americans initially believed that foreign entanglements were a "racket" designed to benefit wealthy "Merchants of Death."</p>
+                    <p>However, as totalitarianism expanded across Europe and Asia, President Franklin D. Roosevelt navigated a delicate path. Through incremental shifts—from the Neutrality Acts to the "Arsenal of Democracy"—he prepared the American public for the reality that oceans alone could no longer guarantee safety in the modern age.</p>
+
+                    <button class="action-btn w-full mt-10" onclick="validateStartPage()">Begin Application -></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION I: SCENARIOS -->
+        <section id="section-1" class="chapter-section">
+            <div class="p-10 max-w-5xl mx-auto">
+                <div class="content-block">
+                    <h2>I. Policy Scenarios</h2>
+                    <p>Evaluate the following historical situations. Based on the lecture content regarding the shift from isolation to intervention, select the most appropriate U.S. policy or historical outcome for each scenario.</p>
+                    
+                    <div class="space-y-8 mt-10">
+                        <!-- Scenario 1 -->
+                        <div class="p-4 border-l-4 border-gold bg-black/20">
+                            <label class="font-bold">Scenario 1: 1935 Arms Export</label>
+                            <p class="text-sm italic text-gray-400 mt-1">A private American manufacturer seeks to sell machine guns to Italy during their invasion of Ethiopia. Under the law at this specific time, what is the result?</p>
+                            <select id="scen-1" class="scenario-select">
+                                <option value="">Select an option...</option>
+                                <option>Prohibited: Neutrality Act of 1935 bans arms exports to warring nations.</option>
+                                <option>Allowed: Provided they pay in cash and use their own ships.</option>
+                                <option>Allowed: As part of the 'Arsenal of Democracy' initiative.</option>
+                                <option>Negotiable: Only if Italy agrees to the Four Freedoms.</option>
+                                <option>Prohibited: Because Italy did not sign the Atlantic Charter.</option>
+                            </select>
+                        </div>
+
+                        <!-- Scenario 2 -->
+                        <div class="p-4 border-l-4 border-gold bg-black/20">
+                            <label class="font-bold">Scenario 2: 1939 British Merchant</label>
+                            <p class="text-sm italic text-gray-400 mt-1">Great Britain requires non-military supplies like medical bandages. They have the funds and the naval capability to protect their own transport. Which policy applies?</p>
+                            <select id="scen-2" class="scenario-select">
+                                <option value="">Select an option...</option>
+                                <option>Total Embargo: No goods can leave U.S. ports for belligerents.</option>
+                                <option>Lend-Lease: The U.S. provides the bandages on credit immediately.</option>
+                                <option>Cash and Carry: Britain buys the goods and transports them themselves.</option>
+                                <option>Four Freedoms: The goods are donated as a moral imperative.</option>
+                                <option>Neutrality Act of 1936: Prohibits all credit and loans to warring nations.</option>
+                            </select>
+                        </div>
+
+                        <!-- Scenario 3 -->
+                        <div class="p-4 border-l-4 border-gold bg-black/20">
+                            <label class="font-bold">Scenario 3: The Garden Hose</label>
+                            <p class="text-sm italic text-gray-400 mt-1">Britain's "house is on fire" (financial collapse) but they are the last democracy standing. How does FDR justify moving past 'Cash and Carry'?</p>
+                            <select id="scen-3" class="scenario-select">
+                                <option value="">Select an option...</option>
+                                <option>By signing an executive order to enter the war immediately.</option>
+                                <option>Using the Lend-Lease Act to lend equipment vital to U.S. security.</option>
+                                <option>By calling for an immediate embargo on the British Empire.</option>
+                                <option>By appointing Charles Lindbergh to negotiate with Germany.</option>
+                                <option>By enforcing the Neutrality Act of 1937's civil war clause.</option>
+                            </select>
+                        </div>
+
+                        <!-- Scenario 4 -->
+                        <div class="p-4 border-l-4 border-gold bg-black/20">
+                            <label class="font-bold">Scenario 4: Resource Chokehold</label>
+                            <p class="text-sm italic text-gray-400 mt-1">In response to Japanese expansion into French Indochina, the U.S. implements a drastic economic measure. What is it?</p>
+                            <select id="scen-4" class="scenario-select">
+                                <option value="">Select an option...</option>
+                                <option>A 100% tax on Japanese luxury silk imports.</option>
+                                <option>An 80% oil and scrap metal embargo to cripple their military.</option>
+                                <option>A invitation for Japan to join the Atlantic Charter.</option>
+                                <option>The immediate relocation of the Pacific Fleet to California.</option>
+                                <option>The signing of the Four Freedoms pact with General Tojo.</option>
+                            </select>
+                        </div>
+
+                        <!-- Scenario 5 -->
+                        <div class="p-4 border-l-4 border-gold bg-black/20">
+                            <label class="font-bold">Scenario 5: 7:48 AM, December 7</label>
+                            <p class="text-sm italic text-gray-400 mt-1">Japanese aircraft appear over Oahu. Beyond the physical damage, what is the most significant political shift that occurs by noon the next day?</p>
+                            <select id="scen-5" class="scenario-select">
+                                <option value="">Select an option...</option>
+                                <option>The America First Committee calls for a peace treaty.</option>
+                                <option>The Neutrality Acts are reaffirmed by an angry Congress.</option>
+                                <option>National unity is achieved, ending the isolationist debate instantly.</option>
+                                <option>FDR resigns his post as Commander in Chief.</option>
+                                <option>The U.S. Navy withdraws all ships to the Atlantic coast.</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION II: CONCEPTUAL MATRIX -->
+        <section id="section-2" class="chapter-section">
+            <div class="p-10 max-w-5xl mx-auto">
+                <div class="content-block">
+                    <h2>II. Conceptual Matrix</h2>
+                    <p>Contrast the two defining legislative frameworks that bookended America's path to war. Explain how each handled the following categories based on the lecture.</p>
+                    
+                    <div class="matrix-table mt-8">
+                        <div class="matrix-header">Metric</div>
+                        <div class="matrix-header">Neutrality Acts (1935-37)</div>
+                        <div class="matrix-header">Lend-Lease Act (1941)</div>
+
+                        <!-- Row 1 -->
+                        <div class="matrix-label">Primary Objective</div>
+                        <div class="matrix-cell">
+                            <textarea id="matrix-1-a" class="matrix-input" placeholder="Explain the focus on non-intervention..."></textarea>
+                        </div>
+                        <div class="matrix-cell">
+                            <textarea id="matrix-1-b" class="matrix-input" placeholder="Explain the shift toward supporting Allies..."></textarea>
+                        </div>
+
+                        <!-- Row 2 -->
+                        <div class="matrix-label">Financial Requirement</div>
+                        <div class="matrix-cell">
+                            <textarea id="matrix-2-a" class="matrix-input" placeholder="Describe requirements for payment..."></textarea>
+                        </div>
+                        <div class="matrix-cell">
+                            <textarea id="matrix-2-b" class="matrix-input" placeholder="Describe the credit/leasing terms..."></textarea>
+                        </div>
+
+                        <!-- Row 3 -->
+                        <div class="matrix-label">Impact on Allies</div>
+                        <div class="matrix-cell">
+                            <textarea id="matrix-3-a" class="matrix-input" placeholder="Analyze how this affected Allied strength..."></textarea>
+                        </div>
+                        <div class="matrix-cell">
+                            <textarea id="matrix-3-b" class="matrix-input" placeholder="Analyze the result of U.S. supply power..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION III: CASE STUDY -->
+        <section id="section-3" class="chapter-section">
+            <div class="p-10 max-w-5xl mx-auto">
+                <div class="content-block">
+                    <h2>III. Case Study: The Arsenal Retools</h2>
+                    <div class="flex items-start gap-6 mt-4">
+                        <div class="w-16 h-16 shrink-0 bg-gold rounded-full flex items-center justify-center">
+                            <svg class="w-10 h-10 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M2 20h20M7 20v-5m5 5v-10m5 10v-15m-12 0h14" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="case-intro italic">"Standard Steel Works" in Ohio has manufactured luxury car frames since 1925. In late 1940, government officials arrive with blueprints for Sherman tank chassis. The owner, a former 'America First' supporter, must decide whether to accept the contract and retool the entire factory floor.</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 bg-black/30 p-6 rounded border border-white/10">
+                        <h4 class="text-gold uppercase text-xs mb-4">Strategic Checklist for Retooling</h4>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check-1">
+                            <label>Retraining workforce from civilian precision to military durability.</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check-2">
+                            <label>Moral justification: Does "Freedom from Fear" apply to industrial output?</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check-3">
+                            <label>Financial Risk: Relying on government 'Arsenal of Democracy' contracts.</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check-4">
+                            <label>Shift in Identity: Moving from an isolationist business to a war engine.</label>
+                        </div>
+                    </div>
+
+                    <h3 class="mt-8">Final Verdict</h3>
+                    <p>As the factory owner, explain your decision. How does your choice reflect the transition from the "Merchants of Death" mentality of the 1930s to the "Four Freedoms" of the 1940s?</p>
+                    <textarea id="case-verdict" class="matrix-input" style="min-height: 150px;" placeholder="Write your analysis here..."></textarea>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION IV: CREATIVE APPLICATION -->
+        <section id="section-4" class="chapter-section">
+            <div class="p-10 max-w-5xl mx-auto">
+                <div class="content-block">
+                    <h2>IV. Creative Application: The Grand Strategy</h2>
+                    <p>You have been appointed as a senior strategic advisor to the "Big Three" (Roosevelt, Churchill, Stalin) in early 1942. Your task is to draft a memo addressing the friction between the Allies while leveraging American industrial superiority.</p>
+                    
+                    <div class="p-6 bg-white/5 border border-dashed border-gold rounded mt-6">
+                        <h4 class="text-gold font-bold mb-2">Prompt: The Arsenal Memo</h4>
+                        <p class="text-sm">Identify one key goal for each leader (e.g., Soviet Eastern Front pressure, British naval intelligence, U.S. production) and explain how the <strong>Grand Alliance</strong> will coordinate these to overwhelm the Axis powers. Address how American production (surpassing Germany/Japan combined) will be the "decisive factor" in the post-war reconstruction goals mentioned in the <strong>Atlantic Charter</strong>.</p>
+                        
+                        <textarea id="creative-essay" class="matrix-input mt-4" style="min-height: 300px;" placeholder="Strategic Memorandum: To the Big Three..."></textarea>
+                    </div>
+
+                    <div class="mt-10 p-6 border-t border-gold text-center">
+                        <p class="text-sm italic mb-4 text-gray-400">Review all sections before final submission. Your progress is saved locally, but clicking "Finish" generates the final archival report.</p>
+                        <button class="action-btn px-12 py-4 text-xl" onclick="downloadJSON()">Finish & Download Report</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script>
+    let currentTab = 'start-page';
+    // Updated to use sequential internal assets as requested
+    const bgImages = [
+        'assets/bg_1.png',
+        'assets/bg_2.png',
+        'assets/bg_3.png',
+        'assets/bg_4.png',
+        'assets/bg_5.png',
+        'assets/bg_6.png',
+        'assets/bg_7.png'
+    ];
+
+    function initSlideshow() {
+        const container = document.getElementById('bg-slideshow');
+        bgImages.forEach((img, i) => {
+            const div = document.createElement('div');
+            div.className = 'bg-slide';
+            div.style.backgroundImage = `url('${img}')`;
+            container.appendChild(div);
+        });
+        const slides = document.querySelectorAll('.bg-slide');
+        if (slides.length === 0) return;
+        
+        let idx = 0;
+        gsap.set(slides[0], {opacity: 1, scale: 1.1});
+        
+        setInterval(() => {
+            gsap.to(slides[idx], {opacity: 0, scale: 1, duration: 3});
+            idx = (idx + 1) % slides.length;
+            gsap.to(slides[idx], {opacity: 1, scale: 1.1, duration: 3});
+        }, 10000);
+    }
+
+    function switchTab(id) {
+        if (id !== 'start-page' && !validateStartPage(true)) return;
+        
+        document.querySelectorAll('.chapter-section').forEach(s => s.classList.remove('active-section'));
+        document.getElementById(id).classList.add('active-section');
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-nav'));
+        document.getElementById('nav-' + id).classList.add('active-nav');
+        currentTab = id;
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    function validateStartPage(silent = false) {
+        const name = document.getElementById('student-name').value;
+        const period = document.getElementById('student-period').value;
+        if (!name || !period) {
+            if (!silent) alert("Please enter your Full Name and Period to proceed.");
+            return false;
+        }
+        document.getElementById('student-name').readOnly = true;
+        document.getElementById('student-period').disabled = true;
+        if (!silent) switchTab('section-1');
+        return true;
+    }
+
+    function getAppPayload() {
+        const data = {
+            lecture: "15.2 From Isolation to War",
+            timestamp: new Date().toLocaleString(),
+            studentName: document.getElementById('student-name').value,
+            studentPeriod: document.getElementById('student-period').value,
+            currentTab: currentTab,
+            isLocked: document.getElementById('student-name').readOnly,
+            responses: {}
+        };
+        document.querySelectorAll('textarea, select:not(#student-period), input[type="checkbox"]').forEach(el => {
+            data.responses[el.id] = el.type === 'checkbox' ? el.checked : el.value;
+        });
+        return data;
+    }
+
+    function applyPayload(data) {
+        if(!data) return;
+        document.getElementById('student-name').value = data.studentName || "";
+        document.getElementById('student-period').value = data.studentPeriod || "";
+        if(data.isLocked || (data.studentName && data.studentName.trim() !== "")) {
+            document.getElementById('student-name').readOnly = true;
+            document.getElementById('student-period').disabled = true;
+        }
+        if(data.responses) {
+            Object.keys(data.responses).forEach(id => {
+                const el = document.getElementById(id);
+                if(el) {
+                    if(el.type === 'checkbox') el.checked = data.responses[id];
+                    else el.value = data.responses[id];
+                }
+            });
+        }
+        if(data.currentTab) switchTab(data.currentTab);
+    }
+
+    function exportProgressFile() {
+        const data = getAppPayload();
+        const name = (data.studentName || "Student").replace(/\s+/g, '_');
+        const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `Progress_Lecture15.2_${name}.json`;
+        link.click();
+    }
+
+    function importProgressFile(e) {
+        const file = e.target.files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+            try {
+                const data = JSON.parse(evt.target.result);
+                data.isLocked = true;
+                applyPayload(data);
+                alert("Progress Restored. Identity has been locked.");
+            } catch (err) {
+                alert("Error loading file. Ensure it is a valid progress JSON.");
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    function downloadJSON() {
+        const data = getAppPayload();
+        if (!data.studentName) {
+            alert("Please enter your name on the first page.");
+            switchTab('start-page');
+            return;
+        }
+        const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `Final_Lecture15.2_${data.studentName.replace(/\s+/g, '_')}.json`;
+        a.click();
+    }
+
+    window.onload = () => {
+        document.getElementById('display-date').value = new Date().toLocaleDateString();
+        initSlideshow();
+        
+        const saved = localStorage.getItem('lecture_15_2_autosave');
+        if (saved) {
+            if (confirm("Found autosaved progress. Load it?")) {
+                applyPayload(JSON.parse(saved));
+            }
+        }
+
+        setInterval(() => {
+            const data = getAppPayload();
+            localStorage.setItem('lecture_15_2_autosave', JSON.stringify(data));
+        }, 30000);
+    };
+</script>
+
+</body>
+</html>
