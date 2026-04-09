@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 15.1 - The Rise of Dictators</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        :root {
+            --color-navy-deep: #20263A; 
+            --color-cream: #F4EBDD;    
+            --color-navy: #4F6FA3;     
+            --color-steel-nib: #7F7A74; 
+            --color-gold: #C45A44;     
+            --color-gold-light: #D57A66;
+            --color-wax-red: #A63A3A;
+            --font-heading: 'Times New Roman', serif;
+            --font-body: 'Arial', sans-serif;
+            --font-ui: 'Verdana', sans-serif;
+        }
+
+        * { box-sizing: border-box; }
+        html, body { overflow-x: hidden; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); background-color: var(--color-navy-deep); color: var(--color-cream); line-height: 1.8; font-size: 1.15rem; }
+        
+        /* Background Effects */
+        #bg-slideshow { position: fixed; inset: 0; z-index: 0; pointer-events: none; background-size: cover; background-position: center; transition: background-image 1.5s ease-in-out; }
+        body::after { content: ''; position: fixed; inset: 0; background: linear-gradient(135deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.45) 50%, rgba(0, 0, 0, 0.75) 100%); z-index: 1; pointer-events: none; }
+        
+        /* Layout Architecture */
+        .app-container { display: flex; position: relative; z-index: 2; }
+        
+        /* Left Navigation Panel */
+        .side-nav { position: fixed; top: 0; left: 0; bottom: 0; width: 280px; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(15px); border-right: 1px solid rgba(196,90,68,0.3); display: flex; flex-direction: column; padding: 2rem 1.5rem; z-index: 100; overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; }
+        .side-nav::-webkit-scrollbar { display: none; }
+        .nav-title { font-family: var(--font-heading); color: var(--color-gold); font-size: 1.3rem; margin-bottom: 2rem; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid rgba(196,90,68,0.2); padding-bottom: 0.5rem; }
+        .nav-links { display: flex; flex-direction: column; gap: 0.5rem; flex-grow: 1; }
+        .nav-btn { background: transparent; border: 1px solid transparent; color: var(--color-cream); text-align: left; padding: 10px 12px; font-family: var(--font-ui); cursor: pointer; transition: all 0.3s; border-radius: 4px; font-size: 0.85rem; font-weight: bold; }
+        .nav-btn.active-nav { background: rgba(196,90,68,0.15); border: 1px solid var(--color-gold); color: var(--color-gold); }
+        .nav-btn:hover:not(.active-nav) { background: rgba(255,255,255,0.05); }
+        .nav-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 2rem; }
+        
+        /* Main Content Area */
+        .main-content { flex: 1; margin-left: 280px; min-height: 100vh; display: flex; flex-direction: column; }
+        .hero-banner-flush { width: 100%; height: auto; display: block; border-bottom: 2px solid var(--color-gold); margin-top: 0; }
+        .content-wrapper { max-width: 1000px; margin: 0 auto; padding: 40px; width: 100%; flex-grow: 1; }
+        .content-block { background: rgba(32, 38, 58, 0.1); backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 3rem; margin-bottom: 3rem; box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3); display: flow-root; }
+        @media (max-width: 1024px) { 
+            .side-nav { display: none; } 
+            .main-content { margin-left: 0; } 
+            .content-wrapper { padding: 30px 20px; } 
+            .content-block { padding: 2rem; } 
+        }
+        
+        /* Typography */
+        h2 { font-family: var(--font-heading); color: var(--color-gold) !important; font-size: 3rem !important; line-height: 1.2; margin-bottom: 2rem !important; margin-top: 0; font-weight: bold; }
+        h3 { font-family: var(--font-heading); color: var(--color-gold) !important; font-size: 2.25rem !important; line-height: 1.3; margin-bottom: 1.5rem !important; margin-top: 2.5rem !important; font-weight: bold; }
+        p { margin-bottom: 1.5rem; font-size: 1.15rem; }
+        p:not(.first-p) { text-indent: 2.5em; }
+        .first-p { text-indent: 0 !important; }
+        ul { list-style-type: square; margin-left: 2em; margin-bottom: 1.5rem; line-height: 1.8; font-size: 1.15rem; }
+        
+        /* UI Elements */
+        .id-panel { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 20px; margin-bottom: 2rem; background: rgba(0,0,0,0.4); padding: 25px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); }
+        .id-panel label { display: block; font-family: var(--font-ui); font-size: 0.85rem; color: var(--color-steel-nib); margin-bottom: 5px; text-transform: uppercase; }
+        .id-panel input, .id-panel select { width: 100%; background: rgba(0,0,0,0.6); border: 1px solid var(--color-steel-nib); color: var(--color-cream); padding: 12px; border-radius: 4px; font-family: var(--font-ui); font-size: 1rem; }
+        .id-panel input:focus, .id-panel select:focus { outline: none; border-color: var(--color-gold); }
+        .id-panel input[readonly] { opacity: 0.7; cursor: not-allowed; }
+        .textarea-dark { width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--color-steel-nib); color: var(--color-cream); padding: 1.5rem; border-radius: 4px; min-height: 120px; font-family: var(--font-body); font-size: 1.1rem; resize: vertical; }
+        .textarea-dark:focus { outline: none; border-color: var(--color-gold); }
+        
+        /* Prominent Default Spotlights (Stacked) */
+        .spotlight-wrapper { width: 100%; margin: 2.5rem 0; background: rgba(0,0,0,0.4); padding: 25px; border-radius: 8px; border: 2px solid var(--color-gold); clear: both; }
+        .spotlight-wrapper img { width: 100%; height: auto; border: 2px solid var(--color-gold-light); border-radius: 4px; display: block; }
+        .spotlight-content { display: block; margin-top: 20px; }
+        .spotlight-caption { font-size: 0.95rem; text-align: left; margin-bottom: 15px; font-style: italic; color: #ddd; line-height: 1.5; }
+        .spotlight-why { font-size: 1.05rem; color: var(--color-cream); margin-bottom: 20px; line-height: 1.6; }
+        .spotlight-why strong { color: var(--color-gold); }
+        
+        /* Portrait Spotlights (Side-by-Side) */
+        .spotlight-wrapper.portrait { display: flex; flex-wrap: wrap; gap: 30px; align-items: flex-start; }
+        .spotlight-wrapper.portrait img { width: auto; flex: 0 1 40%; min-width: 250px; max-width: 100%; max-height: 500px; object-fit: contain; margin-top: 0; }
+        .spotlight-wrapper.portrait .spotlight-content { flex: 1 1 50%; min-width: 250px; margin-top: 0; display: flex; flex-direction: column; }
+        .spotlight-wrapper.portrait .question-box { flex: 1 1 100%; margin-top: 10px; }
+        
+        /* Full Sized Visuals (Restored) */
+        .visual-wrapper { width: 100%; margin: 2.5rem 0; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); clear: both; }
+        .visual-img { width: 100%; height: auto; border-radius: 4px; border: 2px solid var(--color-gold-light); display: block; }
+        .caption-text { font-style: italic; font-size: 0.95rem; color: #ddd; margin-top: 15px; line-height: 1.5; text-indent: 0; }
+        .question-box { border-left: 4px solid var(--color-gold); padding-left: 1.5rem; margin-top: 1.5rem; }
+        @media (max-width: 768px) { 
+            .id-panel { grid-template-columns: 1fr; }
+            .spotlight-wrapper.portrait { flex-direction: column; align-items: stretch; }
+            .spotlight-wrapper.portrait img { max-width: 100%; max-height: none; width: 100%; }
+        }
+        
+        /* Compact Checkpoint System */
+        .checkpoint-block { margin-top: 3rem; margin-bottom: 2rem; padding: 25px; border: 2px dashed rgba(196,90,68,0.4); border-radius: 8px; background: rgba(0,0,0,0.2); clear: both; }
+        .checkpoint-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start; }
+        @media (max-width: 768px) { .checkpoint-grid { grid-template-columns: 1fr; } }
+        .checkpoint-q { animation: fadeIn 0.4s ease-out; }
+        .checkpoint-q p.first-p { font-size: 1rem; line-height: 1.4; margin-bottom: 0.75rem; color: var(--color-cream); }
+        .checkpoint-q .checklist-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; cursor: pointer; padding: 8px 12px; background: rgba(0,0,0,0.2); border-radius: 4px; border: 1px solid transparent; transition: all 0.2s; font-size: 0.9rem; line-height: 1.3; }
+        .checkpoint-q .checklist-item:hover { background: rgba(0,0,0,0.4); border-color: rgba(196,90,68,0.3); }
+        .checkpoint-q .checklist-item input[type="radio"] { margin-top: 2px; width: 16px; height: 16px; accent-color: var(--color-gold); flex-shrink: 0; }
+        
+        /* Cloze Specific */
+        .word-bank { display: flex; flex-wrap: wrap; gap: 12px; padding: 1.5rem; background: rgba(0,0,0,0.3); border: 1px dashed var(--color-steel-nib); border-radius: 8px; margin-bottom: 2rem; }
+        .word-pill { background: rgba(79, 111, 163, 0.5); border: 1px solid var(--color-navy); color: var(--color-cream); padding: 8px 18px; border-radius: 25px; font-size: 1rem; font-weight: bold; }
+        .cloze-input { background: rgba(0,0,0,0.5); border: none; border-bottom: 2px solid var(--color-gold); color: var(--color-gold-light); padding: 4px 8px; font-size: 1.15rem; text-align: center; width: 180px; margin: 0 5px; font-family: var(--font-body); border-radius: 2px; transition: all 0.2s; }
+        .cloze-input:focus { outline: none; border-bottom-color: white; background: rgba(0,0,0,0.8); }
+        
+        /* Buttons & Navigation */
+        .action-btn { padding: 10px 20px; border-radius: 4px; font-family: var(--font-ui); font-weight: bold; cursor: pointer; text-transform: uppercase; transition: all 0.3s; background: rgba(0,0,0,0.5); color: var(--color-gold); border: 1.5px solid var(--color-gold); width: 100%; }
+        .action-btn:hover:not(:disabled) { background: var(--color-gold); color: var(--color-navy-deep); transform: translateY(-2px); }
+        .action-btn:disabled { transform: none !important; }
+        .bottom-nav { display: flex; justify-content: space-between; padding-top: 2rem; border-top: 1px solid rgba(196,90,68,0.3); margin-top: 3rem; gap: 20px; clear: both; }
+        .bottom-nav .action-btn { width: auto; }
+        .chapter-section { display: none; }
+        .chapter-section.active-section { display: block; animation: fadeIn 0.6s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div id="bg-slideshow"></div>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="side-nav">
+            <div class="nav-title">Table of Contents</div>
+            <div class="nav-links">
+                <button id="nav-sec-1" class="nav-btn active-nav" onclick="switchTab('sec-1')">Start Page</button>
+                <button id="nav-sec-2" class="nav-btn" onclick="switchTab('sec-2')">I. The Roots of Totalitarianism and the Rise of Dictators</button>
+                <button id="nav-sec-3" class="nav-btn" onclick="switchTab('sec-3')">II. The Failure of Diplomacy and the Outbreak of War</button>
+                <button id="nav-sec-4" class="nav-btn" onclick="switchTab('sec-4')">III. Quantitative & Spatial Analysis: Mapping History</button>
+                <button id="nav-sec-5" class="nav-btn" onclick="switchTab('sec-5')">IV. Vocabulary Activity</button>
+            </div>
+            <div class="nav-actions">
+                <button class="action-btn" onclick="downloadProgress()">Save Progress</button>
+                <label class="action-btn" style="text-align: center; cursor: pointer; display: block; margin-bottom: 0;">
+                    Load Progress
+                    <input type="file" accept=".json" style="display: none;" onchange="loadProgress(event)">
+                </label>
+                <button class="action-btn" onclick="resetProgress()">Reset Progress</button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            
+            <!-- SECTION 1: START PAGE -->
+            <div id="sec-1" class="chapter-section active-section">
+                <img src="assets/Header%20Banner%20Chapter%2015.1.png" alt="Chapter Banner" class="hero-banner-flush">
+                
+                <div class="content-wrapper">
+                    <div class="id-panel">
+                        <div>
+                            <label>Student Name</label>
+                            <input type="text" id="student-name" placeholder="Enter your full name">
+                        </div>
+                        <div>
+                            <label>Class Period</label>
+                            <select id="student-period">
+                                <option value="" disabled selected>Select</option>
+                                <option value="1">Period 1</option>
+                                <option value="2">Period 2</option>
+                                <option value="3">Period 3</option>
+                                <option value="4">Period 4</option>
+                                <option value="6">Period 6</option>
+                                <option value="7">Period 7</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Date Completed</label>
+                            <input type="text" id="completion-date" readonly placeholder="Auto-fills on finish">
+                        </div>
+                    </div>
+
+                    <div class="content-block">
+                        <h3>Core Objectives</h3>
+                        <ul>
+                            <li>Trace the rise of fascism and totalitarianism in Europe and Asia, linking economic instability to political extremism.</li>
+                            <li>Evaluate the failure of the League of Nations and the policy of appeasement (Munich Conference) in halting Axis expansion.</li>
+                            <li>Analyze the military effectiveness of the German Blitzkrieg strategy during the invasion of Poland and the fall of France.</li>
+                        </ul>
+                        
+                        <h3>Key Terms</h3>
+                        <p class="first-p">Totalitarianism | Fascism | Adolf Hitler | Benito Mussolini | Hideki Tojo | Appeasement | Munich Pact | Neville Chamberlain | Blitzkrieg | Axis Powers | Joseph Stalin | Nazi-Soviet Non-Aggression Pact | Spanish Civil War | Neutrality Acts | Rhineland</p>
+                    </div>
+
+                    <div class="content-block">
+                        <h2>Introduction | The Gathering Storm</h2>
+                        <p class="first-p">When the guns of World War I fell silent in 1918, a weary world hoped it had just survived the "war to end all wars". However, the peace forged at Versailles proved to be merely a temporary truce. Over the next two decades, a devastating combination of unresolved national grievances, a crippling global economic depression, and the failure of international diplomacy created a fertile breeding ground for political extremism. Across Europe and Asia, desperate populations—disillusioned with struggling democratic governments—turned to radical "strongmen" who promised order, national pride, and economic recovery at the cost of individual liberty. This chapter explores how the unchecked ambitions of totalitarian leaders dismantled the fragile post-war order, capitalized on the democratic world's desperate desire to avoid another conflict, and ultimately dragged the globe into an even deadlier abyss.</p>
+
+                        <div class="visual-wrapper">
+                            <img src="assets/Visual_1.png" alt="Map indicating gathering storms" class="visual-img">
+                            <p class="caption-text">The fragile peace established after World War I quickly deteriorated under the weight of unresolved national grievances and catastrophic economic collapse. As democratic institutions fractured, desperate populations turned to radical totalitarian regimes that promised stability and national resurrection at the expense of individual liberty, creating the conditions for a new global conflict.</p>
+                        </div>
+                    </div>
+
+                    <div class="bottom-nav">
+                        <div></div>
+                        <button id="btn-next-sec-1" class="action-btn" onclick="switchTab('sec-2', 'nav-sec-2')">Next Section &rarr;</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: THE ROOTS OF TOTALITARIANISM -->
+            <div id="sec-2" class="chapter-section">
+                <div class="content-wrapper">
+                    <div class="content-block">
+                        <h2>The Roots of Totalitarianism and the Rise of Dictators</h2>
+                        <p class="first-p">Following the devastation of World War I, the promise of a lasting peace quickly unraveled due to severe economic instability and political disillusionment. As the global economy collapsed during the Great Depression, people in struggling nations lost faith in democratic governments and began looking for "strongman" leaders who promised national resurrection, economic recovery, and strict order. This desperate environment facilitated the rise of <strong>totalitarianism</strong>—a system where the state demands absolute obedience and controls all aspects of public and private life. Across Europe and Asia, ruthless dictators seized power, systematically dismantled personal freedoms, and began reshaping their societies to fit radical, aggressive ideologies.</p>
+
+                        <h3>The Fragile Peace of Versailles</h3>
+                        <p class="first-p">The end of World War I in 1918 was supposed to be the "war to end all wars." The signing of the Treaty of Versailles in 1919 was intended to create a lasting peace based on the principles of collective security and democratic self-determination. However, the treaty itself contained the seeds of future conflict. It imposed harsh financial reparations on Germany, redrew the map of Europe in ways that left many ethnic groups as minorities in new nations, and established a League of Nations that lacked the military power or the participation of the United States to enforce its mandates.</p>
+
+                        <div class="spotlight-wrapper">
+                            <img src="assets/Spotlight_1.png" alt="Treaty of Versailles Signing">
+                            <div class="spotlight-content">
+                                <p class="spotlight-caption">Delegates gather in the Hall of Mirrors at Versailles for the signing of the peace settlement in 1919.</p>
+                                <p class="spotlight-why"><strong>Why it Matters:</strong> The Treaty of Versailles created a fragile peace built on punishment, resentment, and weak international enforcement. Its reparations, border changes, and political fallout helped destabilize Europe and gave extremist movements fertile ground to grow.</p>
+                                <div class="question-box">
+                                    <label>Analysis Question: How did the terms of the Treaty of Versailles contribute to the economic and political conditions that encouraged the rise of totalitarian movements in Europe?</label>
+                                    <textarea id="va_1" class="textarea-dark" placeholder="Enter your answer here..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="first-p">As the 1920s progressed, the initial hope for a peaceful world began to fade. The global economy, which had been fragile since the end of the war, collapsed entirely during the Great Depression of 1929. This economic catastrophe did more than just cause poverty; it destroyed the public's faith in democratic governments. In many nations, people began looking for "strongman" leaders who promised order, national pride, and economic recovery. This shift led to the rise of Totalitarianism.</p>
+                        
+                        <p>In a totalitarian state, the individual exists only to serve the needs of the government. Personal freedoms such as freedom of speech, assembly, and the press are abolished. The government uses a combination of mass propaganda and state-sponsored terror to maintain control and eliminate any perceived opposition. This political environment allowed for the emergence of distinct but equally dangerous regimes in the Soviet Union, Italy, and Germany. These leaders did not just want to rule their countries; they wanted to reshape the very nature of human society according to their own radical ideologies.</p>
+
+                        <!-- CHECKPOINT BLOCK 1 -->
+                        <div class="checkpoint-block" id="cp-block-1" data-current="0">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                <h3 style="margin: 0 !important; font-size: 1.5rem !important;">Checkpoint</h3>
+                                <span class="cp-indicator" style="color: var(--color-steel-nib); font-family: var(--font-ui); font-size: 0.9rem;"></span>
+                            </div>
+                            
+                            <div class="checkpoint-q">
+                                <p class="first-p">1. How did the Great Depression impact the political landscape of many nations?</p>
+                                <label class="checklist-item"><input type="radio" name="cp1" value="A" onchange="handleRadioChange('cp-block-1')"> A) It strengthened public trust in democratic institutions and international treaties.</label>
+                                <label class="checklist-item"><input type="radio" name="cp1" value="B" onchange="handleRadioChange('cp-block-1')"> B) It caused people to lose faith in democratic governments and seek "strongman" leaders.</label>
+                                <label class="checklist-item"><input type="radio" name="cp1" value="C" onchange="handleRadioChange('cp-block-1')"> C) It led to the immediate creation of the League of Nations to manage the global economy.</label>
+                                <label class="checklist-item"><input type="radio" name="cp1" value="D" onchange="handleRadioChange('cp-block-1')"> D) It resulted in widespread support for the financial reparations outlined in the Treaty of Versailles.</label>
+                            </div>
+
+                            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                                <button class="action-btn cp-prev-btn" onclick="navigateCp('cp-block-1', -1)" style="width: auto;">&larr; Previous</button>
+                                <button class="action-btn cp-next-btn" onclick="navigateCp('cp-block-1', 1)" style="width: auto;">Next Question &rarr;</button>
+                            </div>
+                        </div>
+
+                        <h3>The Soviet Union and the Rise of Stalin</h3>
+                        <p class="first-p">In the wake of the Russian Revolution of 1917, the Soviet Union had become the world’s first communist state. After the death of Vladimir Lenin in 1924, a power struggle erupted within the Communist Party. The victor was <strong>Joseph Stalin</strong>, a man whose name literally means "man of steel." Stalin was determined to transform the Soviet Union from a backward agrarian society into a modern industrial superpower. He abandoned Lenin's "New Economic Policy," which had allowed some small-scale private enterprise, in favor of "Five-Year Plans" that emphasized heavy industry and the collectivization of agriculture.</p>
+
+                        <div class="spotlight-wrapper portrait">
+                            <img src="assets/Spotlight_2.png" alt="Official State Portrait of Stalin">
+                            <div class="spotlight-content">
+                                <p class="spotlight-caption">A formal state portrait presents Joseph Stalin as the commanding leader of the Soviet Union.</p>
+                                <p class="spotlight-why"><strong>Why it Matters:</strong> Stalin’s rule showed how a totalitarian state could combine industrial modernization, forced collectivization, censorship, and terror to control an entire society. His dictatorship became one of the clearest examples of how fear and ideology could be fused into political power.</p>
+                            </div>
+                            <div class="question-box">
+                                <label>Analysis Question: Why did Stalin’s consolidation of power become an important example of how totalitarian governments controlled society during the interwar period?</label>
+                                <textarea id="va_2" class="textarea-dark" placeholder="Enter your answer here..."></textarea>
+                            </div>
+                        </div>
+
+                        <p class="first-p">Stalin’s methods were brutal and absolute. To consolidate his power, he launched the "Great Purge," a campaign of political repression in which he executed or imprisoned millions of people, including high-ranking party officials, military leaders, and ordinary citizens. People were often arrested on the flimsiest of evidence or simply to fill quotas of "enemies of the state." The secret police, the NKVD, became the primary instrument of state terror. In the countryside, Stalin’s policy of forced collectivization led to widespread famine, particularly in Ukraine, where millions of peasants died of starvation in an event known as the Holodomor.</p>
+
+                        <p>By the mid-1930s, Stalin had successfully established a totalitarian regime where he exercised absolute control through fear and a massive cult of personality. Every school, factory, and neighborhood was monitored by the state. While Stalin’s ideology was far-left communism—theoretically dedicated to the equality of the working class—his methods of governance became the blueprint for the totalitarian dictators who would soon rise on the political right. The state became a machine, and the individual was merely a replaceable part.</p>
+
+                        <!-- CHECKPOINT BLOCK 2 -->
+                        <div class="checkpoint-block" id="cp-block-2" data-current="0">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                <h3 style="margin: 0 !important; font-size: 1.5rem !important;">Checkpoint</h3>
+                                <span class="cp-indicator" style="color: var(--color-steel-nib); font-family: var(--font-ui); font-size: 0.9rem;"></span>
+                            </div>
+
+                            <div class="checkpoint-q">
+                                <p class="first-p">2. What was the primary purpose of Stalin's "Great Purge"?</p>
+                                <label class="checklist-item"><input type="radio" name="cp2" value="A" onchange="handleRadioChange('cp-block-2')"> A) To eliminate political opposition and consolidate his absolute power.</label>
+                                <label class="checklist-item"><input type="radio" name="cp2" value="B" onchange="handleRadioChange('cp-block-2')"> B) To introduce democratic reforms within the Communist Party.</label>
+                                <label class="checklist-item"><input type="radio" name="cp2" value="C" onchange="handleRadioChange('cp-block-2')"> C) To recruit new military leaders for the upcoming world war.</label>
+                                <label class="checklist-item"><input type="radio" name="cp2" value="D" onchange="handleRadioChange('cp-block-2')"> D) To transition the Soviet economy back to small-scale private enterprise.</label>
+                            </div>
+
+                            <div class="checkpoint-q">
+                                <p class="first-p">3. What was the main focus of Joseph Stalin's "Five-Year Plans"?</p>
+                                <label class="checklist-item"><input type="radio" name="cp3" value="A" onchange="handleRadioChange('cp-block-2')"> A) Expanding small-scale private enterprise and international trade.</label>
+                                <label class="checklist-item"><input type="radio" name="cp3" value="B" onchange="handleRadioChange('cp-block-2')"> B) Promoting agricultural independence by breaking up large state-owned farms.</label>
+                                <label class="checklist-item"><input type="radio" name="cp3" value="C" onchange="handleRadioChange('cp-block-2')"> C) Transforming the Soviet Union into a modern industrial superpower through heavy industry and collectivization.</label>
+                                <label class="checklist-item"><input type="radio" name="cp3" value="D" onchange="handleRadioChange('cp-block-2')"> D) Reducing the size of the military to focus on consumer goods production.</label>
+                            </div>
+
+                            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                                <button class="action-btn cp-prev-btn" onclick="navigateCp('cp-block-2', -1)" style="width: auto;">&larr; Previous</button>
+                                <button class="action-btn cp-next-btn" onclick="navigateCp('cp-block-2', 1)" style="width: auto;">Next Question &rarr;</button>
+                            </div>
+                        </div>
+
+                        <h3>Mussolini and the Birth of Fascism</h3>
+                        <p class="first-p">While Stalin was consolidating power in the Soviet Union, Italy was experiencing its own political crisis. Italy had been on the winning side of World War I, but many Italians felt betrayed by the peace settlement, which did not grant Italy all the territory it had been promised in the Adriatic. The country also faced high unemployment, rapid inflation, and frequent strikes by socialist workers. Amidst this chaos, <strong>Benito Mussolini</strong> emerged as a powerful new voice. Mussolini, a former socialist himself, founded the National Fascist Party, drawing on a new ideology called <strong>Fascism</strong>.</p>
+
+                        <div class="spotlight-wrapper">
+                            <img src="assets/Spotlight_3.png" alt="March on Rome">
+                            <div class="spotlight-content">
+                                <p class="spotlight-caption">Benito Mussolini’s Fascist movement advances during the March on Rome in 1922.</p>
+                                <p class="spotlight-why"><strong>Why it Matters:</strong> Mussolini’s rise demonstrated how postwar unrest, inflation, strikes, and fear of socialism could weaken democracy and open the door to fascism. Italy became the first major European state where dictatorship presented itself as the cure for disorder.</p>
+                                <div class="question-box">
+                                    <label>Analysis Question: How did the political and economic instability of postwar Italy help make the March on Rome an effective demonstration of Fascist strength?</label>
+                                    <textarea id="va_3" class="textarea-dark" placeholder="Enter your answer here..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="first-p">Fascism is a political system headed by a dictator that calls for extreme nationalism and has no tolerance for opposition. Unlike communism, which theoretically seeks a classless society and international worker solidarity, fascism glorifies the state and argues that certain nations and races are superior to others. Fascists believe that a nation is only strong when it is united under a single, powerful leader who embodies the will of the people. Mussolini used his private paramilitary force, known as the "Blackshirts," to attack communists and socialists, portraying himself as the only leader capable of preventing a Bolshevik-style revolution in Italy and restoring law and order.</p>
+
+                        <p>In 1922, Mussolini and thousands of his followers staged the "March on Rome." Fearing a civil war, King Victor Emmanuel III appointed Mussolini as Prime Minister. Once in power, Mussolini—who took the title <em>Il Duce</em> (The Leader)—quickly moved to dismantle Italian democracy. He passed laws that gave him the power to rule by decree, took control of the press, and established a secret police to monitor "subversives." He promised to restore Italy to its former glory as a modern version of the Roman Empire, emphasizing military strength and imperial expansion as the ultimate signs of national vitality.</p>
+
+                        <!-- CHECKPOINT BLOCK 3 -->
+                        <div class="checkpoint-block" id="cp-block-3" data-current="0">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                <h3 style="margin: 0 !important; font-size: 1.5rem !important;">Checkpoint</h3>
+                                <span class="cp-indicator" style="color: var(--color-steel-nib); font-family: var(--font-ui); font-size: 0.9rem;"></span>
+                            </div>
+
+                            <div class="checkpoint-q">
+                                <p class="first-p">4. How does fascism fundamentally differ from communism?</p>
+                                <label class="checklist-item"><input type="radio" name="cp4" value="A" onchange="handleRadioChange('cp-block-3')"> A) Fascism seeks a classless society, while communism glorifies the state and national superiority.</label>
+                                <label class="checklist-item"><input type="radio" name="cp4" value="B" onchange="handleRadioChange('cp-block-3')"> B) Fascism promotes international worker solidarity, while communism emphasizes extreme nationalism.</label>
+                                <label class="checklist-item"><input type="radio" name="cp4" value="C" onchange="handleRadioChange('cp-block-3')"> C) Fascism glorifies the state and argues for national superiority, while communism theoretically seeks a classless society.</label>
+                                <label class="checklist-item"><input type="radio" name="cp4" value="D" onchange="handleRadioChange('cp-block-3')"> D) Fascism relies on a democratic parliament, while communism relies on a single dictator.</label>
+                            </div>
+
+                            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                                <button class="action-btn cp-prev-btn" onclick="navigateCp('cp-block-3', -1)" style="width: auto;">&larr; Previous</button>
+                                <button class="action-btn cp-next-btn" onclick="navigateCp('cp-block-3', 1)" style="width: auto;">Next Question &rarr;</button>
+                            </div>
+                        </div>
+
+                        <h3>The Rise of Adolf Hitler and the Nazi Party</h3>
+                        <p class="first-p">The most dangerous of the new totalitarian leaders emerged in Germany. Germany had suffered more than any other nation under the Treaty of Versailles. The "war guilt clause" was a deep wound to German national pride, and the massive reparations payments led to hyperinflation that wiped out the savings of the middle class in the early 1920s. Just as the economy began to stabilize, the Great Depression hit, and unemployment in Germany soared to six million people by 1932. In this atmosphere of desperation and anger, <strong>Adolf Hitler</strong> and his National Socialist German Workers' Party (the Nazi Party) rose to prominence.</p>
+
+                        <div class="spotlight-wrapper portrait">
+                            <img src="assets/Spotlight_4.png" alt="Hitler at Nuremberg">
+                            <div class="spotlight-content">
+                                <p class="spotlight-caption">Adolf Hitler appears at a mass Nazi rally in Nuremberg surrounded by disciplined crowds and symbols of the regime.</p>
+                                <p class="spotlight-why"><strong>Why it Matters:</strong> Hitler’s rise revealed how economic collapse, nationalist anger, racism, and propaganda could destroy a democracy from within. Nazi rule turned public frustration into dictatorship and transformed Germany into the most aggressive power in Europe.</p>
+                            </div>
+                            <div class="question-box">
+                                <label>Analysis Question: How did economic crisis and Nazi propaganda help transform Hitler from a fringe political figure into the dictator of the Third Reich?</label>
+                                <textarea id="va_4" class="textarea-dark" placeholder="Enter your answer here..."></textarea>
+                            </div>
+                        </div>
+
+                        <p class="first-p">Hitler was a gifted orator who understood how to exploit the fears and resentments of the German people. While in prison for a failed coup attempt in 1923, he wrote <em>Mein Kampf</em> (My Struggle), which outlined the core beliefs of Nazism. Hitler argued that the German people—whom he called "Aryans"—were a "master race" destined to rule the world. He blamed Germany’s problems on a global conspiracy of Jews and communists, a view rooted in deep-seated <strong>Anti-Semitism</strong>. He also called for <em>Lebensraum</em>, or "living space," for the German people, which he intended to take by force from the Slavic peoples of Eastern Europe and Russia.</p>
+
+                        <p>By 1932, the Nazis had become the largest political party in the German parliament (the Reichstag). In January 1933, Hitler was appointed Chancellor. Within months, he used a fire at the Reichstag building as an excuse to suspend civil liberties and pass the Enabling Act, which gave him dictatorial powers for four years. Hitler established the Third Reich, a totalitarian state where he ruled as <em>Der Führer</em> (The Leader). He used the Gestapo (secret police) and the SS (a specialized military unit) to enforce his will, while his propaganda minister, Joseph Goebbels, used radio, film, and massive rallies at Nuremberg to spread the Nazi message. Hitler’s regime was built on the complete subversion of the law to the absolute will of the leader.</p>
+
+                        <!-- CHECKPOINT BLOCK 4 -->
+                        <div class="checkpoint-block" id="cp-block-4" data-current="0">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                <h3 style="margin: 0 !important; font-size: 1.5rem !important;">Checkpoint</h3>
+                                <span class="cp-indicator" style="color: var(--color-steel-nib); font-family: var(--font-ui); font-size: 0.9rem;"></span>
+                            </div>
+
+                            <div class="checkpoint-q">
+                                <p class="first-p">5. What core Nazi belief did Adolf Hitler outline in his book Mein Kampf?</p>
+                                <label class="checklist-item"><input type="radio" name="cp5" value="A" onchange="handleRadioChange('cp-block-4')"> A) The necessity of a global alliance with communist nations.</label>
+                                <label class="checklist-item"><input type="radio" name="cp5" value="B" onchange="handleRadioChange('cp-block-4')"> B) The idea that the German "Aryan" race was destined to rule the world.</label>
+                                <label class="checklist-item"><input type="radio" name="cp5" value="C" onchange="handleRadioChange('cp-block-4')"> C) The need to strictly adhere to the Treaty of Versailles.</label>
+                                <label class="checklist-item"><input type="radio" name="cp5" value="D" onchange="handleRadioChange('cp-block-4')"> D) The importance of establishing a democratic parliament in Germany.</label>
+                            </div>
+                            
+                            <div class="checkpoint-q">
+                                <p class="first-p">6. Which combination of factors most directly facilitated Adolf Hitler's rise to power in Germany?</p>
+                                <label class="checklist-item"><input type="radio" name="cp6" value="A" onchange="handleRadioChange('cp-block-4')"> A) The success of the League of Nations and the prosperity of the 1920s.</label>
+                                <label class="checklist-item"><input type="radio" name="cp6" value="B" onchange="handleRadioChange('cp-block-4')"> B) National anger over the Treaty of Versailles and severe economic devastation from the Great Depression.</label>
+                                <label class="checklist-item"><input type="radio" name="cp6" value="C" onchange="handleRadioChange('cp-block-4')"> C) A strong desire to form an alliance with the Soviet Union to defeat France.</label>
+                                <label class="checklist-item"><input type="radio" name="cp6" value="D" onchange="handleRadioChange('cp-block-4')"> D) The overwhelming support of communist workers in the Reichstag.</label>
+                            </div>
+
+                            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                                <button class="action-btn cp-prev-btn" onclick="navigateCp('cp-block-4', -1)" style="width: auto;">&larr; Previous</button>
+                                <button class="action-btn cp-next-btn" onclick="navigateCp('cp-block-4', 1)" style="width: auto;">Next Question &rarr;</button>
+                            </div>
+                        </div>
+
+                        <h3>Militarism and Aggression in Asia</h3>
+                        <p class="first-p">The rise of totalitarianism was not confined to Europe. In Japan, a different but equally aggressive form of militarism was taking hold. During the 1920s, Japan had moved toward democracy and international cooperation, but the Great Depression hit the island nation hard, as its exports plummeted. Japan lacked the natural resources—such as oil, rubber, and iron—necessary for its growing industries and looked toward the Asian mainland to solve its economic problems. Military leaders, who held great prestige in Japanese society, began to exert more influence over the government, arguing that only expansion could save Japan.</p>
+
+                        <div class="spotlight-wrapper">
+                            <img src="assets/Spotlight_5.png" alt="Japanese Troops in Tsitsihar">
+                            <div class="spotlight-content">
+                                <p class="spotlight-caption">Japanese troops move into northeastern China during the expansion that followed the Manchurian crisis.</p>
+                                <p class="spotlight-why"><strong>Why it Matters:</strong> Japan’s expansion into Manchuria marked a major shift toward military rule and imperial conquest in East Asia. It also exposed how weak international resistance encouraged aggressive states to keep expanding.</p>
+                                <div class="question-box">
+                                    <label>Analysis Question: Why did the invasion of Manchuria strengthen militarist control in Japan and encourage further expansion in Asia?</label>
+                                    <textarea id="va_5" class="textarea-dark" placeholder="Enter your answer here..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="first-p">In 1931, a group of Japanese army officers acted without the civilian government's permission and staged an explosion on a Japanese-owned railroad in Manchuria. They used this "incident" as an excuse to invade and occupy the entire resource-rich province in northern China. When the League of Nations investigated and condemned the invasion, Japan simply withdrew from the organization. By the mid-1930s, the military, led by figures like <strong>Hideki Tojo</strong>, had gained full control of the Japanese government. Tojo and other leaders believed that Japan was destined to lead a "Greater East Asia Co-Prosperity Sphere," which was essentially a Japanese empire designed to replace Western colonial influence in the Pacific.</p>
+                        
+                        <p>In 1937, Japan launched a full-scale invasion of the rest of China. The war was characterized by extreme brutality, including the infamous "Rape of Nanjing," where Japanese troops murdered hundreds of thousands of civilians and prisoners of war over several weeks. The United States, following a policy of isolationism, expressed moral outrage and provided some aid to the Chinese government but refused to take any concrete military or economic action to stop the Japanese advance. This lack of intervention convinced Japanese leaders that the Western powers were weak and unwilling to fight for their interests in Asia, a miscalculation that would eventually lead to the Pacific War.</p>
+
+                        <!-- CHECKPOINT BLOCK 5 -->
+                        <div class="checkpoint-block" id="cp-block-5" data-current="0">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                <h3 style="margin: 0 !important; font-size: 1.5rem !important;">Checkpoint</h3>
+                                <span class="cp-indicator" style="color: var(--color-steel-nib); font-family: var(--font-ui); font-size: 0.9rem;"></span>
+                            </div>
+
+                            <div class="checkpoint-q">
+                                <p class="first-p">7. Why did Japanese military leaders argue for aggressive expansion into the Asian mainland?</p>
+                                <label class="checklist-item"><input type="radio" name="cp7" value="A" onchange="handleRadioChange('cp-block-5')"> A) To spread democratic ideals and institutions to neighboring countries.</label>
+                                <label class="checklist-item"><input type="radio" name="cp7" value="B" onchange="handleRadioChange('cp-block-5')"> B) To secure natural resources like oil and iron that Japan lacked for its growing industries.</label>
+                                <label class="checklist-item"><input type="radio" name="cp7" value="C" onchange="handleRadioChange('cp-block-5')"> C) To fulfill treaty obligations made with the United States and Great Britain.</label>
+                                <label class="checklist-item"><input type="radio" name="cp7" value="D" onchange="handleRadioChange('cp-block-5')"> D) To assist the Chinese government in its fight against communist rebels.</label>
+                            </div>
+
+                            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                                <button class="action-btn cp-prev-btn" onclick="navigateCp('cp-block-5', -1)" style="width: auto;">&larr; Previous</button>
+                                <button class="action-btn cp-next-btn" onclick="navigateCp('cp-block-5', 1)" style="width: auto;">Next Question &rarr;</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bottom-nav">
+                        <button class="action-btn" onclick="switchTab('sec-1', 'nav-sec-1')">&larr; Previous</button>
+                        <button id="btn-next-sec-2" class="action-btn" onclick="switchTab('sec-3', 'nav-sec-3')" disabled>🔒 Answer Checkpoints to Continue</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: THE FAILURE OF DIPLOMACY -->
+            <div id="sec-3" class="chapter-section">
+                <div class="content-wrapper">
+                    <div class="content-block">
+                        <h2>The Failure of Diplomacy and the Outbreak of War</h2>
+                        <p class="first-p">The international community proved disastrously incapable of halting the aggressive expansion of the new totalitarian states. Crippled by the catastrophic memory of the First World War and lacking a mechanism to enforce international law, democratic nations repeatedly chose a policy of appeasement over direct confrontation. This diplomatic paralysis allowed the Axis Powers to systematically redraw the map of Europe and Asia without facing significant military consequences. Ultimately, this failure to act emboldened the dictators and ensured that when their territorial demands finally crossed the line into Poland, the world was plunged back into a devastating global conflict.</p>
+
+                        <h3>The Collapse of Collective Security</h3>
+                        <p class="first-p">By the mid-1930s, the international system established after World War I was in total collapse. The <strong>Axis Powers</strong>—a formal alliance between Germany, Italy, and Japan—had begun to coordinate their aggressive actions. In 1935, Mussolini invaded Ethiopia, one of the few independent nations in Africa. The Ethiopian Emperor, Haile Selassie, appealed to the League of Nations for help. The League imposed minor economic sanctions but refused to ban the sale of oil to Italy or close the Suez Canal to Italian ships, rendering the sanctions useless. Mussolini’s victory showed that a powerful nation could ignore international law without consequence.</p>
+
+                        <div class="spotlight-wrapper">
+                            <img src="assets/Spotlight_6.png" alt="Haile Selassie at the League of Nations">
+                            <div class="spotlight-content">
+                                <p class="spotlight-caption">Emperor Haile Selassie addresses the League of Nations after Italy’s invasion of Ethiopia.</p>
+                                <p class="spotlight-why"><strong>Why it Matters:</strong> Ethiopia’s appeal to the League of Nations exposed the collapse of collective security. When major powers failed to stop aggression in Africa, dictators elsewhere learned that treaties and international condemnation carried little real force.</p>
+                                <div class="question-box">
+                                    <label>Analysis Question: Why did the League of Nations’ failure to defend Ethiopia become a major warning sign that the post-World War I order was collapsing?</label>
+                                    <textarea id="va_6" class="textarea-dark" placeholder="Enter your answer here..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="first-p">In 1936, Hitler took his first major military risk by sending German troops into the <strong>Rhineland</strong>. This area, located on the border between Germany and France, had been demilitarized by the Treaty of Versailles to provide a buffer for French security. Moving troops into the Rhineland was a clear violation of the treaty and technically an act of war. However, France was paralyzed by political division and refused to act without British support. Britain, meanwhile, was not prepared for war and many of its leaders hoped that Hitler’s goals were limited to reclaiming "German" territory. This failure to act emboldened the dictators, showing them that the democratic powers lacked the will to enforce the peace.</p>
+
+                        <p>The <strong>Spanish Civil War</strong> (1936–1939) further illustrated the divide between the dictatorships and the democracies. When General Francisco Franco led a fascist-style revolt against the elected Spanish Republican government, Hitler and Mussolini sent thousands of troops, tanks, and planes to support him. The Soviet Union sent aid to the Republicans, while Britain, France, and the United States remained neutral, passing laws to prevent the sale of arms to either side. Spain became a "dress rehearsal" for World War II, as German and Italian forces tested new weapons and tactics, such as the saturation bombing of civilian populations in cities like Guernica, which was immortalized in a painting by Pablo Picasso.</p>
+
+                        <!-- CHECKPOINT BLOCK 6 -->
+                        <div class="checkpoint-block" id="cp-block-6" data-current="0">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                <h3 style="margin: 0 !important; font-size: 1.5rem !important;">Checkpoint</h3>
+                                <span class="cp-indicator" style="color: var(--color-steel-nib); font-family: var(--font-ui); font-size: 0.9rem;"></span>
+                            </div>
+                            
+                            <div class="checkpoint-q">
+                                <p class="first-p">8. Why was Hitler's 1936 remilitarization of the Rhineland highly significant?</p>
+                                <label class="checklist-item"><input type="radio" name="cp8" value="A" onchange="handleRadioChange('cp-block-6')"> A) It marked the beginning of his alliance with the Soviet Union.</label>
+                                <label class="checklist-item"><input type="radio" name="cp8" value="B" onchange="handleRadioChange('cp-block-6')"> B) It violated the Treaty of Versailles and demonstrated the democratic powers' unwillingness to act.</label>
+                                <label class="checklist-item"><input type="radio" name="cp8" value="C" onchange="handleRadioChange('cp-block-6')"> C) It resulted in a devastating military defeat for the German army.</label>
+                                <label class="checklist-item"><input type="radio" name="cp8" value="D" onchange="handleRadioChange('cp-block-6')"> D) It prompted the United States to immediately enter the European conflict.</label>
+                            </div>
+
+                            <div class="checkpoint-q">
+                                <p class="first-p">9. What did the League of Nations' response to Italy's invasion of Ethiopia demonstrate?</p>
+                                <label class="checklist-item"><input type="radio" name="cp9" value="A" onchange="handleRadioChange('cp-block-6')"> A) That the League possessed a powerful military capable of stopping aggression.</label>
+                                <label class="checklist-item"><input type="radio" name="cp9" value="B" onchange="handleRadioChange('cp-block-6')"> B) That powerful nations could ignore international law without facing severe consequences.</label>
+                                <label class="checklist-item"><input type="radio" name="cp9" value="C" onchange="handleRadioChange('cp-block-6')"> C) That economic sanctions were a highly effective tool for maintaining world peace.</label>
+                                <label class="checklist-item"><input type="radio" name="cp9" value="D" onchange="handleRadioChange('cp-block-6')"> D) That African nations were fully protected by European defensive alliances.</label>
+                            </div>
+
+                            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                                <button class="action-btn cp-prev-btn" onclick="navigateCp('cp-block-6', -1)" style="width: auto;">&larr; Previous</button>
+                                <button class="action-btn cp-next-btn" onclick="navigateCp('cp-block-6', 1)" style="width: auto;">Next Question &rarr;</button>
+                            </div>
+                        </div>
+
+                        <h3>The Policy of Appeasement</h3>
+                        <p class="first-p">As Hitler’s demands grew, the world faced a crisis. In March 1938, Hitler forced the <em>Anschluss</em>, or union, of Germany and Austria, claiming he was simply uniting all German-speaking peoples. He then turned his attention to the Sudetenland, a mountainous region of Czechoslovakia home to three million ethnic Germans. The Czechs had a strong military, modern fortifications, and a defensive alliance with France, and they were prepared to fight. However, European leaders, remembering the horrific casualties of the First World War, were desperate to avoid another global conflict at almost any cost.</p>
+
+                        <div class="spotlight-wrapper">
+                            <img src="assets/Spotlight_7.png" alt="Chamberlain after Munich">
+                            <div class="spotlight-content">
+                                <p class="spotlight-caption">Neville Chamberlain displays the agreement he believed would preserve peace after the Munich Conference.</p>
+                                <p class="spotlight-why"><strong>Why it Matters:</strong> Appeasement showed how fear of another world war led democratic leaders to make concessions that strengthened Hitler instead of restraining him. The Munich settlement became a symbol of the danger of sacrificing smaller nations for temporary peace.</p>
+                                <div class="question-box">
+                                    <label>Analysis Question: How did Chamberlain’s response at Munich differ from the earlier goal of collective security established after World War I?</label>
+                                    <textarea id="va_7" class="textarea-dark" placeholder="Enter your answer here..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="first-p">In September 1938, British Prime Minister <strong>Neville Chamberlain</strong> and French Premier Edouard Daladier met with Hitler and Mussolini at the Munich Conference. Chamberlain believed in the policy of <strong>Appeasement</strong>, which meant giving in to an aggressor’s demands in order to keep the peace and prevent a wider war. At the conference, the <strong>Munich Pact</strong> was signed, which allowed Germany to annex the Sudetenland in exchange for a promise from Hitler that he would seek no more territory. Chamberlain returned to London waving a piece of paper and declaring he had achieved "peace for our time."</p>
+
+                        <p>History would judge appeasement as a catastrophic failure. Winston Churchill, then a member of the British Parliament, warned that "Britain and France had to choose between war and dishonor. They chose dishonor. They will have war." Churchill was proven right only six months later. In March 1939, Hitler broke his promise and sent German troops to occupy the rest of Czechoslovakia. It was now clear that Hitler could not be trusted and that his ultimate goal was the total domination of the European continent. Britain and France finally realized that war was inevitable and pledged to defend Poland, Hitler's next likely target, if it were attacked.</p>
+
+                        <!-- CHECKPOINT BLOCK 7 -->
+                        <div class="checkpoint-block" id="cp-block-7" data-current="0">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                <h3 style="margin: 0 !important; font-size: 1.5rem !important;">Checkpoint</h3>
+                                <span class="cp-indicator" style="color: var(--color-steel-nib); font-family: var(--font-ui); font-size: 0.9rem;"></span>
+                            </div>
+
+                            <div class="checkpoint-q">
+                                <p class="first-p">10. What was the primary goal of the policy of appeasement pursued by Britain and France at the Munich Conference?</p>
+                                <label class="checklist-item"><input type="radio" name="cp10" value="A" onchange="handleRadioChange('cp-block-7')"> A) To form a secret military alliance with the Soviet Union against Germany.</label>
+                                <label class="checklist-item"><input type="radio" name="cp10" value="B" onchange="handleRadioChange('cp-block-7')"> B) To give in to Hitler's territorial demands in order to keep the peace and prevent a wider war.</label>
+                                <label class="checklist-item"><input type="radio" name="cp10" value="C" onchange="handleRadioChange('cp-block-7')"> C) To financially cripple the Axis Powers through heavy trade embargoes.</label>
+                                <label class="checklist-item"><input type="radio" name="cp10" value="D" onchange="handleRadioChange('cp-block-7')"> D) To force Germany to pay the remaining reparations from World War I.</label>
+                            </div>
+
+                            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                                <button class="action-btn cp-prev-btn" onclick="navigateCp('cp-block-7', -1)" style="width: auto;">&larr; Previous</button>
+                                <button class="action-btn cp-next-btn" onclick="navigateCp('cp-block-7', 1)" style="width: auto;">Next Question &rarr;</button>
+                            </div>
+                        </div>
+
+                        <h3>The Nazi-Soviet Pact and the Invasion of Poland</h3>
+                        <p class="first-p">To ensure he could invade Poland without starting a two-front war, Hitler made a shocking diplomatic move. In August 1939, Germany and the Soviet Union signed the <strong>Nazi-Soviet Non-Aggression Pact</strong>. The world was stunned that these two bitter ideological enemies would agree to a peace treaty. However, the pact served both dictators’ interests. It allowed Stalin time to build up the Soviet military, and it gave Hitler a green light to attack Poland without fear of a Soviet intervention. Secretly, the two leaders agreed to divide Poland and the Baltic states between them.</p>
+
+                        <div class="spotlight-wrapper">
+                            <img src="assets/Spotlight_8.png" alt="German Troops in Warsaw">
+                            <div class="spotlight-content">
+                                <p class="spotlight-caption">German troops parade through Warsaw after the conquest of Poland in September 1939.</p>
+                                <p class="spotlight-why"><strong>Why it Matters:</strong> The invasion of Poland turned years of diplomatic crisis into full-scale world war. It also demonstrated how the Nazi-Soviet Pact and Blitzkrieg gave Germany the freedom and military advantage to strike with devastating speed.</p>
+                                <div class="question-box">
+                                    <label>Analysis Question: How did the Nazi-Soviet Pact create the conditions that made the German invasion of Poland possible in September 1939?</label>
+                                    <textarea id="va_8" class="textarea-dark" placeholder="Enter your answer here..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="first-p">On September 1, 1939, the German military launched a massive invasion of Poland from the west. This marked the official beginning of World War II. Germany introduced a new form of warfare called <strong>Blitzkrieg</strong>, or "lightning war." This strategy used fast-moving tanks (Panzers) and motorized infantry supported by overwhelming air power (the Luftwaffe) to penetrate deep into enemy territory and disrupt communications and supply lines. The Polish army, which still relied on horse-mounted cavalry and was caught off guard, was quickly overwhelmed. By the end of the month, Poland had been crushed and divided between Germany and the Soviet Union, which had invaded from the east on September 17.</p>
+
+                        <p>After the fall of Poland, there was a period of relative quiet known as the "Phony War," as both sides prepared for the next move. This ended in April 1940 when Hitler launched a series of rapid-fire invasions of Denmark, Norway, the Netherlands, and Belgium. These attacks were merely the prelude to the main event: the invasion of France. The French had built a massive line of fortifications called the Maginot Line along their border with Germany, believing it was impregnable. However, the German Blitzkrieg simply bypassed the line by driving through the Ardennes Forest in Belgium, a region the French military had incorrectly deemed impassable for tanks.</p>
+
+                        <!-- CHECKPOINT BLOCK 8 -->
+                        <div class="checkpoint-block" id="cp-block-8" data-current="0">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                <h3 style="margin: 0 !important; font-size: 1.5rem !important;">Checkpoint</h3>
+                                <span class="cp-indicator" style="color: var(--color-steel-nib); font-family: var(--font-ui); font-size: 0.9rem;"></span>
+                            </div>
+
+                            <div class="checkpoint-q">
+                                <p class="first-p">11. Why did Adolf Hitler and Joseph Stalin sign the Non-Aggression Pact in 1939?</p>
+                                <label class="checklist-item"><input type="radio" name="cp11" value="A" onchange="handleRadioChange('cp-block-8')"> A) They shared identical political ideologies and wished to unite their countries.</label>
+                                <label class="checklist-item"><input type="radio" name="cp11" value="B" onchange="handleRadioChange('cp-block-8')"> B) The League of Nations forced them to sign the treaty to prevent a European war.</label>
+                                <label class="checklist-item"><input type="radio" name="cp11" value="C" onchange="handleRadioChange('cp-block-8')"> C) It gave Hitler a green light to attack Poland without a two-front war, and it gave Stalin time to build up his military.</label>
+                                <label class="checklist-item"><input type="radio" name="cp11" value="D" onchange="handleRadioChange('cp-block-8')"> D) They both wanted to form an alliance with Britain and France against Japan.</label>
+                            </div>
+
+                            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                                <button class="action-btn cp-prev-btn" onclick="navigateCp('cp-block-8', -1)" style="width: auto;">&larr; Previous</button>
+                                <button class="action-btn cp-next-btn" onclick="navigateCp('cp-block-8', 1)" style="width: auto;">Next Question &rarr;</button>
+                            </div>
+                        </div>
+
+                        <h3>The Fall of France and the Battle of Britain</h3>
+                        <p class="first-p">The French army, once considered the strongest in Europe, collapsed in just six weeks. By June 1940, German troops had captured Paris, and France was forced to sign a humiliating armistice in the same railroad car where Germany had surrendered in 1918. A puppet government, known as Vichy France, was established in the south, while the north and the Atlantic coast were placed under direct German military occupation. The fall of France left Great Britain as the only democracy in Europe standing against the Axis.</p>
+
+                        <div class="spotlight-wrapper">
+                            <img src="assets/Spotlight_9.png" alt="RAF Pilots Battle of Britain">
+                            <div class="spotlight-content">
+                                <p class="spotlight-caption">Royal Air Force pilots stand ready during Britain’s air defense against the Luftwaffe.</p>
+                                <p class="spotlight-why"><strong>Why it Matters:</strong> The Battle of Britain proved that Hitler’s expansion could be stopped. Britain’s survival kept a major democratic power in the war and prevented German domination of Western Europe.</p>
+                                <div class="question-box">
+                                    <label>Analysis Question: Why did the British victory in the Battle of Britain matter for the larger course of World War II in Europe?</label>
+                                    <textarea id="va_9" class="textarea-dark" placeholder="Enter your answer here..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="first-p">Hitler expected Britain to sue for peace, but the new British Prime Minister, Winston Churchill, famously vowed that his people would "never surrender." Hitler then launched "Operation Sea Lion," the planned invasion of Britain across the English Channel. To succeed, Germany first had to gain control of the skies. In the summer and fall of 1940, the German Luftwaffe launched a massive bombing campaign against British airfields and then civilian cities (the "Blitz"). This conflict became known as the Battle of Britain. Despite being outnumbered, the British Royal Air Force (RAF), aided by the invention of radar and the bravery of its pilots, successfully defended the island. Hitler was forced to postpone the invasion indefinitely, marking his first major setback.</p>
+
+                        <p>As the war raged in Europe, the United States remained technically neutral, bound by the <strong>Neutrality Acts</strong> passed by Congress in the 1930s. However, President Franklin D. Roosevelt was increasingly convinced that an Axis victory would threaten American security and the "Four Freedoms" of people everywhere. He worked to shift American policy from strict neutrality to providing aid to Britain through programs like "Cash and Carry." The debate in the United States between isolationists, led by the <strong>America First Committee</strong>, and interventionists grew increasingly fierce. This struggle would define American politics until the attack on Pearl Harbor brought the nation directly into the conflict, ending the era of American isolationism forever.</p>
+
+                        <!-- CHECKPOINT BLOCK 9 -->
+                        <div class="checkpoint-block" id="cp-block-9" data-current="0">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                <h3 style="margin: 0 !important; font-size: 1.5rem !important;">Checkpoint</h3>
+                                <span class="cp-indicator" style="color: var(--color-steel-nib); font-family: var(--font-ui); font-size: 0.9rem;"></span>
+                            </div>
+
+                            <div class="checkpoint-q">
+                                <p class="first-p">12. How did German forces manage to conquer France so rapidly in 1940?</p>
+                                <label class="checklist-item"><input type="radio" name="cp12" value="A" onchange="handleRadioChange('cp-block-9')"> A) By launching a massive amphibious invasion along the southern coast of France.</label>
+                                <label class="checklist-item"><input type="radio" name="cp12" value="B" onchange="handleRadioChange('cp-block-9')"> B) By convincing the French government to peacefully surrender through diplomatic negotiations.</label>
+                                <label class="checklist-item"><input type="radio" name="cp12" value="C" onchange="handleRadioChange('cp-block-9')"> C) By bypassing the heavily fortified Maginot Line and driving through the Ardennes Forest.</label>
+                                <label class="checklist-item"><input type="radio" name="cp12" value="D" onchange="handleRadioChange('cp-block-9')"> D) By relying entirely on the Italian military to attack France from the southeast.</label>
+                            </div>
+                            
+                            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                                <button class="action-btn cp-prev-btn" onclick="navigateCp('cp-block-9', -1)" style="width: auto;">&larr; Previous</button>
+                                <button class="action-btn cp-next-btn" onclick="navigateCp('cp-block-9', 1)" style="width: auto;">Next Question &rarr;</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="bottom-nav">
+                        <button class="action-btn" onclick="switchTab('sec-2', 'nav-sec-2')">&larr; Previous</button>
+                        <button id="btn-next-sec-3" class="action-btn" onclick="switchTab('sec-4', 'nav-sec-4')" disabled>🔒 Answer Checkpoints to Continue</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 4: MAPPING HISTORY -->
+            <div id="sec-4" class="chapter-section">
+                <div class="content-wrapper">
+                    <div class="content-block">
+                        <h2>Quantitative & Spatial Analysis: Mapping History</h2>
+                        
+                        <h3>The Shrinking Map of Freedom: Axis Expansion (1931–1939)</h3>
+                        
+                        <h4>Location and Landscape</h4>
+                        <p class="first-p">The decade leading up to World War II was defined by a series of aggressive territorial seizures that fundamentally altered the political geography of the globe. These events took place across three primary theaters: the industrial heartlands of Central Europe, the vast plains of East Asia, and the rugged highlands of East Africa. In Europe, the landscape was dominated by the borders of a resurgent Germany, which sought to reclaim territories lost in 1919 and expand its <em>Lebensraum</em> (living space) into the fertile lands of the east. In Asia, the focal point was Manchuria, a region of northern China that was larger than France and Germany combined, rich in the coal and iron ore Japan desperately needed to fuel its industrial-military complex.</p>
+
+                        <h4>Geography and Events</h4>
+                        <p class="first-p">Spatial reasoning explains why the Axis powers targeted specific regions and how those choices shaped the coming conflict. Japan’s invasion of Manchuria in 1931 was a calculated move to secure a self-sufficient resource base that could withstand a Western naval blockade. For Germany, geography was both a source of grievance and a strategic objective. Hitler viewed the demilitarized <strong>Rhineland</strong> as a geographic insult to German sovereignty; by remilitarizing it in 1936, he secured his western border and prepared for eastward expansion. The annexation of Austria and the Sudetenland (the mountainous border region of Czechoslovakia) were strategic necessities; the Sudetenland contained the Czechs' primary mountain defenses. Without them, the rest of Czechoslovakia was geographically defenseless, allowing Hitler to seize the entire country months later.</p>
+
+                        <div class="visual-wrapper">
+                            <img src="assets/Visual_2.png" alt="Map of Axis Expansion" class="visual-img">
+                            <p class="caption-text">Throughout the 1930s, the Axis powers systematically expanded their territorial control, capitalizing on the reluctance of democratic nations to enforce collective security. Each successful annexation secured vital industrial resources and strategic defensive positions while geographically isolating democratic states, fundamentally altering the global balance of power before the official outbreak of World War II.</p>
+                        </div>
+
+                        <h4>Regional Impact</h4>
+                        <p class="first-p">The regional impact of these expansions was catastrophic for the sovereignty of neighboring states and the balance of power. The annexation of Austria (the <em>Anschluss</em>) gave Germany a direct border with Italy and Yugoslavia, while the seizure of Czechoslovakia provided a launch point for the eventual invasion of Poland. In Asia, the occupation of Manchuria allowed Japan to build a massive continental army and prepare for the 1937 invasion of the Chinese heartland. These moves created a "cumulative momentum"; with each successful seizure, the Axis powers gained more resources, more people, and better strategic positions, while the democratic powers found themselves increasingly encircled and geographically isolated.</p>
+
+                        <h4>Broader Implications</h4>
+                        <p class="first-p">The shifting map of the 1930s serves as a powerful lesson on the failure of "containment" and collective security through the League of Nations. By allowing the Axis powers to redraw borders at will, the international community signaled that the post-WWI order was effectively dead. This period demonstrates that geography is never static; it is constantly being reshaped by the ambitions of powerful states. The unchecked expansion of 1931–1939 ensured that when World War II officially began in Poland, the Axis powers held a massive territorial and industrial advantage, forcing the Allies to fight a long, uphill battle to reclaim the "map of freedom."</p>
+
+                        <h3 style="margin-top: 3rem !important;">Perspective Questions</h3>
+                        <div class="question-box">
+                            <label>Analyze the Imagery: Why did geopolitical maps of the late 1930s often use the "shrinking map of freedom" as a primary visual metaphor? How did this choice of imagery affect the American public’s perception of the threat posed by the Axis powers compared to the more abstract reports of diplomatic failures?</label>
+                            <textarea id="pq_1" class="textarea-dark" placeholder="Enter your response..."></textarea>
+                        </div>
+
+                        <div class="question-box">
+                            <label>Compare Viewpoints: Contrast the reaction of a citizen in a "buffer state" like Czechoslovakia after the Munich Pact with the likely reaction of a British citizen who believed Chamberlain had actually prevented a world war. How do these differing perspectives explain the inherent tension between the policy of "appeasement" and the reality of "collective security"?</label>
+                            <textarea id="pq_2" class="textarea-dark" placeholder="Enter your response..."></textarea>
+                        </div>
+
+                        <div class="question-box">
+                            <label>Evaluate Strategy: Why was the geographic remilitarization of the Rhineland in 1936 more critical to Hitler’s long-term war plans than his subsequent annexations of ethnic German territories? Consider the role of defensive positioning in enabling offensive aggression.</label>
+                            <textarea id="pq_3" class="textarea-dark" placeholder="Enter your response..."></textarea>
+                        </div>
+
+                    </div>
+
+                    <div class="bottom-nav">
+                        <button class="action-btn" onclick="switchTab('sec-3', 'nav-sec-3')">&larr; Previous</button>
+                        <button id="btn-next-sec-4" class="action-btn" onclick="switchTab('sec-5', 'nav-sec-5')">Next Section &rarr;</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 5: VOCABULARY ACTIVITY -->
+            <div id="sec-5" class="chapter-section">
+                <div class="content-wrapper">
+                    <div class="content-block">
+                        <h2>Vocabulary Activity</h2>
+                        <p class="first-p" style="margin-bottom: 2rem;"><strong>Instructions:</strong> Read the following narrative summary of the chapter. Use the terms provided in the Word Bank to fill in the blanks and complete the historical account. Each term is used exactly once.</p>
+
+                        <div class="word-bank">
+                            <span class="word-pill">Totalitarianism</span>
+                            <span class="word-pill">Fascism</span>
+                            <span class="word-pill">Adolf Hitler</span>
+                            <span class="word-pill">Benito Mussolini</span>
+                            <span class="word-pill">Hideki Tojo</span>
+                            <span class="word-pill">Appeasement</span>
+                            <span class="word-pill">Munich Pact</span>
+                            <span class="word-pill">Neville Chamberlain</span>
+                            <span class="word-pill">Blitzkrieg</span>
+                            <span class="word-pill">Axis Powers</span>
+                            <span class="word-pill">Joseph Stalin</span>
+                            <span class="word-pill">Nazi-Soviet Non-Aggression Pact</span>
+                            <span class="word-pill">Spanish Civil War</span>
+                            <span class="word-pill">Neutrality Acts</span>
+                            <span class="word-pill">Rhineland</span>
+                        </div>
+
+                        <p style="line-height: 2.4;">
+                            Following World War I, severe economic depression led to the rise of 1. <input type="text" class="cloze-input">, a system where the state controls all aspects of life. In the Soviet Union, 2. <input type="text" class="cloze-input"> consolidated power and ruled through political repression and terror. Meanwhile, in Italy, 3. <input type="text" class="cloze-input"> dismantled democracy and established a government based on 4. <input type="text" class="cloze-input">, which glorified the state and emphasized extreme nationalism.
+                        </p>
+                        <p style="line-height: 2.4;">
+                            In Germany, the economic devastation of the Great Depression paved the way for 5. <input type="text" class="cloze-input"> to seize power. He soon began violating the Treaty of Versailles, first by sending German troops into the demilitarized 6. <input type="text" class="cloze-input">. These European dictators also tested their modern weapons and tactics during the 7. <input type="text" class="cloze-input">. In Asia, military leaders like 8. <input type="text" class="cloze-input"> took control of Japan, aggressively expanding the nation's empire into China. Together, Germany, Italy, and Japan formally coordinated their aggressive actions as the 9. <input type="text" class="cloze-input">.
+                        </p>
+                        <p style="line-height: 2.4;">
+                            Hoping to avoid another devastating global conflict, European democracies adopted a policy of 10. <input type="text" class="cloze-input">. This culminated when British Prime Minister 11. <input type="text" class="cloze-input"> signed the 12. <input type="text" class="cloze-input">, giving Germany the Sudetenland in exchange for a promise of peace. However, to ensure he could invade Poland without starting a two-front war, Germany's leader shocked the world by signing the 13. <input type="text" class="cloze-input"> with the Soviet Union. Shortly after, Germany invaded Poland using a highly mobile and devastating new military strategy known as 14. <input type="text" class="cloze-input">. As the conflict engulfed Europe, the United States initially remained uninvolved, legally bound by the 15. <input type="text" class="cloze-input"> passed by Congress in the 1930s.
+                        </p>
+                    </div>
+
+                    <div class="bottom-nav">
+                        <button class="action-btn" onclick="switchTab('sec-4', 'nav-sec-4')">&larr; Previous</button>
+                        <button class="action-btn" onclick="finishChapter()" style="background: var(--color-gold); color: var(--color-navy-deep);">Finished &amp; Export JSON</button>
+                    </div>
+                </div>
+            </div>
+            
+        </main>
+    </div>
+
+<script>
+/* Background Management */
+const bgImages = ['assets/bg_1.png', 'assets/bg_2.png', 'assets/bg_3.png', 'assets/bg_4.png'];
+let bgIndex = 0;
+function rotateBackground() {
+    if (bgImages.length === 0) return;
+    const bgEl = document.getElementById('bg-slideshow');
+    if (!bgEl) return;
+    bgEl.style.backgroundImage = `url('${bgImages[bgIndex]}')`;
+    bgIndex = (bgIndex + 1) % bgImages.length;
+}
+document.addEventListener('DOMContentLoaded', () => {
+    rotateBackground();
+    setInterval(rotateBackground, 10000); 
+});
+
+/* Navigation */
+function switchTab(id, btnId = null, scrollTarget = null) {
+    document.querySelectorAll('.chapter-section').forEach(s => s.classList.remove('active-section'));
+    document.getElementById(id).classList.add('active-section');
+    
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-nav'));
+    
+    const activeBtnId = btnId || ('nav-' + id);
+    const activeBtn = document.getElementById(activeBtnId);
+    if (activeBtn) {
+        activeBtn.classList.add('active-nav');
+    }
+    
+    if (scrollTarget) {
+        setTimeout(() => {
+            const target = document.getElementById(scrollTarget);
+            if(target) {
+                const offset = 40;
+                const bodyRect = document.body.getBoundingClientRect().top;
+                const elementRect = target.getBoundingClientRect().top;
+                const elementPosition = elementRect - bodyRect;
+                const offsetPosition = elementPosition - offset;
+                window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+            }
+        }, 50);
+    } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    saveProgress();
+}
+
+/* Data Collection & Export */
+function collectAssignmentData(isFinal) {
+    const studentName = document.getElementById('student-name').value || "Unknown_Student";
+    const studentPeriod = document.getElementById('student-period').value || "Unknown_Period";
+    const now = new Date().toLocaleDateString();
+
+    const assignmentData = {
+        assignmentTitle: "Interactive Chapter 15.1 - The Rise of Dictators",
+        studentInfo: { name: studentName, period: studentPeriod, dateCompleted: isFinal ? now : "In Progress" },
+        responses: { visualAnalysis: {}, checkpoints: {}, perspectiveQuestions: {}, clozeActivity: {} }
+    };
+
+    // Gather Visual Analysis Answers
+    for(let i=1; i<=20; i++) {
+        let el = document.getElementById('va_' + i);
+        if(el) {
+            let qText = el.previousElementSibling ? el.previousElementSibling.innerText.replace('Analysis Question:', '').trim() : 'Visual ' + i;
+            assignmentData.responses.visualAnalysis[qText] = el.value.trim();
+        }
+    }
+
+    // Gather Checkpoint Answers
+    for(let i=1; i<=30; i++) {
+        let inputs = document.querySelectorAll('input[name="cp' + i + '"]');
+        if(inputs.length > 0) {
+            let checked = document.querySelector('input[name="cp' + i + '"]:checked');
+            let qText = inputs[0].closest('.checkpoint-q').querySelector('p.first-p').innerText.trim();
+            assignmentData.responses.checkpoints[qText] = checked ? checked.value : "No Answer";
+        }
+    }
+
+    // Gather Perspective Questions
+    for(let i=1; i<=10; i++) {
+        let el = document.getElementById('pq_' + i);
+        if(el) {
+            let qText = el.previousElementSibling ? el.previousElementSibling.innerText.trim() : 'Question ' + i;
+            assignmentData.responses.perspectiveQuestions[qText] = el.value.trim();
+        }
+    }
+
+    // Gather Cloze Activity Answers
+    document.querySelectorAll('.cloze-input').forEach((input, index) => {
+        assignmentData.responses.clozeActivity[`Blank_${index + 1}`] = input.value.trim();
+    });
+
+    return assignmentData;
+}
+
+function triggerDownload(data, filename) {
+    const dataStr = JSON.stringify(data, null, 2);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function downloadProgress() {
+    const data = collectAssignmentData(false);
+    const safeName = data.studentInfo.name.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+    triggerDownload(data, `Chapter_Progress_${safeName}.json`);
+}
+
+function finishChapter() {
+    const dateField = document.getElementById('completion-date');
+    const now = new Date().toLocaleDateString();
+    if(dateField) dateField.value = now;
+
+    const data = collectAssignmentData(true);
+    const safeName = data.studentInfo.name.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+    triggerDownload(data, `Chapter_Export_${safeName}.json`);
+
+    alert('Upload JSON file to Canvas');
+    switchTab('sec-1', 'nav-sec-1');
+}
+
+/* Loading Progress */
+function loadProgress(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const loadedData = JSON.parse(e.target.result);
+            
+            const nameInput = document.getElementById('student-name');
+            const periodInput = document.getElementById('student-period');
+            
+            if (loadedData.studentInfo) {
+                if (loadedData.studentInfo.name && loadedData.studentInfo.name !== "Unknown_Student") {
+                    nameInput.value = loadedData.studentInfo.name;
+                    nameInput.setAttribute('readonly', 'true');
+                    nameInput.style.opacity = '0.7'; 
+                }
+                if (loadedData.studentInfo.period && loadedData.studentInfo.period !== "Unknown_Period") {
+                    periodInput.value = loadedData.studentInfo.period;
+                    periodInput.setAttribute('disabled', 'true');
+                    periodInput.style.opacity = '0.7'; 
+                }
+            }
+
+            if (loadedData.responses) {
+                if (loadedData.responses.visualAnalysis) {
+                    for(let i=1; i<=20; i++) {
+                        let el = document.getElementById('va_' + i);
+                        if(el) {
+                            let qText = el.previousElementSibling ? el.previousElementSibling.innerText.replace('Analysis Question:', '').trim() : 'Visual ' + i;
+                            if(loadedData.responses.visualAnalysis[qText]) el.value = loadedData.responses.visualAnalysis[qText];
+                        }
+                    }
+                }
+                
+                if (loadedData.responses.checkpoints) {
+                    for(let i=1; i<=30; i++) {
+                        let inputs = document.querySelectorAll('input[name="cp' + i + '"]');
+                        if(inputs.length > 0) {
+                            let qText = inputs[0].closest('.checkpoint-q').querySelector('p.first-p').innerText.trim();
+                            let savedVal = loadedData.responses.checkpoints[qText];
+                            if (savedVal && savedVal !== "No Answer") {
+                                let radio = document.querySelector(`input[name="cp${i}"][value="${savedVal}"]`);
+                                if(radio) radio.checked = true;
+                            }
+                        }
+                    }
+                }
+
+                if (loadedData.responses.perspectiveQuestions) {
+                    for(let i=1; i<=10; i++) {
+                        let el = document.getElementById('pq_' + i);
+                        if(el) {
+                            let qText = el.previousElementSibling ? el.previousElementSibling.innerText.trim() : 'Question ' + i;
+                            if(loadedData.responses.perspectiveQuestions[qText]) el.value = loadedData.responses.perspectiveQuestions[qText];
+                        }
+                    }
+                }
+
+                if (loadedData.responses.clozeActivity) {
+                    document.querySelectorAll('.cloze-input').forEach((input, index) => {
+                        let savedVal = loadedData.responses.clozeActivity[`Blank_${index + 1}`];
+                        if (savedVal) input.value = savedVal;
+                    });
+                }
+            }
+            
+            initCheckpoints();
+            alert('Progress loaded successfully!');
+            
+        } catch (err) {
+            console.error(err);
+            alert('Error loading progress file. Please make sure it is a valid JSON file.');
+        }
+    };
+    reader.readAsText(file);
+    event.target.value = '';
+}
+
+/* Save & Reset Logic */
+function saveProgress() { console.log('Progress stored in memory. Click Save Progress to download.'); }
+function resetProgress() {
+    if(confirm('Are you sure you want to reset all progress?')) {
+        document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+        document.querySelectorAll('.cloze-input, .textarea-dark, #student-name, #student-period, #completion-date').forEach(el => el.value = '');
+        
+        const nameInput = document.getElementById('student-name');
+        const periodInput = document.getElementById('student-period');
+        nameInput.removeAttribute('readonly');
+        nameInput.style.opacity = '1';
+        periodInput.removeAttribute('disabled');
+        periodInput.style.opacity = '1';
+
+        document.querySelectorAll('.checkpoint-block').forEach(block => block.setAttribute('data-current', '0'));
+        initCheckpoints();
+        switchTab('sec-1', 'nav-sec-1');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+/* Checkpoint Management */
+const TOTAL_SECTIONS = 9; // Total checkpoint blocks mapped to main sections
+
+function initCheckpoints() {
+    for(let i=1; i<=TOTAL_SECTIONS; i++) { updateCpUI(`cp-block-${i}`); }
+    checkSectionUnlock();
+}
+
+function updateCpUI(blockId) {
+    const block = document.getElementById(blockId);
+    if(!block) return;
+    const currentIndex = parseInt(block.getAttribute('data-current') || '0');
+    const questions = block.querySelectorAll('.checkpoint-q');
+    const indicator = block.querySelector('.cp-indicator');
+    const prevBtn = block.querySelector('.cp-prev-btn');
+    const nextBtn = block.querySelector('.cp-next-btn');
+
+    questions.forEach((q, idx) => { q.style.display = (idx === currentIndex) ? 'block' : 'none'; });
+    if(indicator) indicator.innerText = `${currentIndex + 1} of ${questions.length}`;
+    if(prevBtn) prevBtn.style.display = (currentIndex === 0) ? 'none' : 'inline-block';
+
+    if(nextBtn) {
+        const currentQ = questions[currentIndex];
+        const isAnswered = currentQ.querySelector('input[type="radio"]:checked') !== null;
+        if (currentIndex === questions.length - 1) {
+            if (isAnswered) {
+                nextBtn.innerText = "Checkpoint Completed ✓";
+                nextBtn.style.borderColor = "var(--color-navy)"; nextBtn.style.color = "var(--color-cream)"; nextBtn.style.backgroundColor = "var(--color-navy)";
+                nextBtn.disabled = true; nextBtn.style.cursor = 'default'; nextBtn.style.opacity = '1';
+            } else {
+                nextBtn.innerText = "Finish Checkpoint";
+                nextBtn.disabled = true; nextBtn.style.opacity = '0.5'; nextBtn.style.cursor = 'not-allowed';
+                nextBtn.style.backgroundColor = "rgba(0,0,0,0.5)"; nextBtn.style.color = "var(--color-gold)"; nextBtn.style.borderColor = "var(--color-gold)";
+            }
+        } else {
+            nextBtn.innerText = "Next Question \u2192";
+            nextBtn.style.backgroundColor = "rgba(0,0,0,0.5)"; nextBtn.style.color = "var(--color-gold)"; nextBtn.style.borderColor = "var(--color-gold)";
+            if (isAnswered) { nextBtn.disabled = false; nextBtn.style.opacity = '1'; nextBtn.style.cursor = 'pointer'; } 
+            else { nextBtn.disabled = true; nextBtn.style.opacity = '0.5'; nextBtn.style.cursor = 'not-allowed'; }
+        }
+    }
+    checkSectionUnlock();
+}
+
+function navigateCp(blockId, dir) {
+    const block = document.getElementById(blockId);
+    let currentIndex = parseInt(block.getAttribute('data-current') || '0');
+    const questions = block.querySelectorAll('.checkpoint-q');
+    currentIndex += dir;
+    if (currentIndex < 0) currentIndex = 0;
+    if (currentIndex >= questions.length) currentIndex = questions.length - 1;
+    block.setAttribute('data-current', currentIndex);
+    updateCpUI(blockId);
+}
+
+function handleRadioChange(blockId) { saveProgress(); updateCpUI(blockId); }
+function isAnswered(name) { return document.querySelector(`input[name="${name}"]:checked`) !== null; }
+function setNavButtonState(btnId, enabled) {
+    const btn = document.getElementById(btnId);
+    if (!btn) return;
+    if (enabled) {
+        btn.removeAttribute('disabled'); btn.style.opacity = '1'; btn.style.cursor = 'pointer';
+        btn.innerHTML = 'Next Section &rarr;'; btn.style.borderColor = 'var(--color-gold)';
+    } else {
+        btn.setAttribute('disabled', 'true'); btn.style.opacity = '0.5'; btn.style.cursor = 'not-allowed';
+        btn.innerHTML = '🔒 Answer Checkpoints to Continue'; btn.style.borderColor = 'var(--color-steel-nib)';
+    }
+}
+
+function checkSectionUnlock() {
+    setNavButtonState('btn-next-sec-1', true); 
+    setNavButtonState('btn-next-sec-2', isAnswered('cp1') && isAnswered('cp2') && isAnswered('cp3') && isAnswered('cp4') && isAnswered('cp5') && isAnswered('cp6') && isAnswered('cp7'));
+    setNavButtonState('btn-next-sec-3', isAnswered('cp8') && isAnswered('cp9') && isAnswered('cp10') && isAnswered('cp11') && isAnswered('cp12'));
+    setNavButtonState('btn-next-sec-4', true); 
+}
+
+window.onload = initCheckpoints;
+</script>
+</body>
+</html>
