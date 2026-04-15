@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 15.4: The Pacific Theater - Interactive Presentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            overflow: hidden;
+            background-color: #020617; /* slate-950 */
+        }
+        .slide {
+            transition: opacity 0.3s ease-in-out;
+        }
+        #eq-container {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        /* Custom scrollbar for text if needed */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #eab308;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body id="presentation-app" class="text-white font-sans antialiased h-screen flex flex-col">
+
+    <!-- Main Content Area -->
+    <main id="slides-container" class="flex-1 flex overflow-hidden relative bg-slate-950 z-0">
+        <!-- Slide 01 -->
+        <article class="slide w-full h-full p-4 md:p-8 flex items-center justify-center">
+            <img src="Slide_Page_01.png" alt="Slide 01" class="max-h-full max-w-full object-contain shadow-2xl rounded" onerror="this.src='https://placehold.co/1920x1080/1e293b/94a3b8?text=Slide_Page_01.png+Missing'">
+        </article>
+        <!-- Slide 02 -->
+        <article class="slide w-full h-full p-4 md:p-8 hidden items-center justify-center">
+            <img src="Slide_Page_02.png" alt="Slide 02" class="max-h-full max-w-full object-contain shadow-2xl rounded" onerror="this.src='https://placehold.co/1920x1080/1e293b/94a3b8?text=Slide_Page_02.png+Missing'">
+        </article>
+        <!-- Slide 03 -->
+        <article class="slide w-full h-full p-4 md:p-8 hidden items-center justify-center">
+            <img src="Slide_Page_03.png" alt="Slide 03" class="max-h-full max-w-full object-contain shadow-2xl rounded" onerror="this.src='https://placehold.co/1920x1080/1e293b/94a3b8?text=Slide_Page_03.png+Missing'">
+        </article>
+        <!-- Slide 04 -->
+        <article class="slide w-full h-full p-4 md:p-8 hidden items-center justify-center">
+            <img src="Slide_Page_04.png" alt="Slide 04" class="max-h-full max-w-full object-contain shadow-2xl rounded" onerror="this.src='https://placehold.co/1920x1080/1e293b/94a3b8?text=Slide_Page_04.png+Missing'">
+        </article>
+        <!-- Slide 05 -->
+        <article class="slide w-full h-full p-4 md:p-8 hidden items-center justify-center">
+            <img src="Slide_Page_05.png" alt="Slide 05" class="max-h-full max-w-full object-contain shadow-2xl rounded" onerror="this.src='https://placehold.co/1920x1080/1e293b/94a3b8?text=Slide_Page_05.png+Missing'">
+        </article>
+        <!-- Slide 06 -->
+        <article class="slide w-full h-full p-4 md:p-8 hidden items-center justify-center">
+            <img src="Slide_Page_06.png" alt="Slide 06" class="max-h-full max-w-full object-contain shadow-2xl rounded" onerror="this.src='https://placehold.co/1920x1080/1e293b/94a3b8?text=Slide_Page_06.png+Missing'">
+        </article>
+        <!-- Slide 07 -->
+        <article class="slide w-full h-full p-4 md:p-8 hidden items-center justify-center">
+            <img src="Slide_Page_07.png" alt="Slide 07" class="max-h-full max-w-full object-contain shadow-2xl rounded" onerror="this.src='https://placehold.co/1920x1080/1e293b/94a3b8?text=Slide_Page_07.png+Missing'">
+        </article>
+        <!-- Slide 08 -->
+        <article class="slide w-full h-full p-4 md:p-8 hidden items-center justify-center">
+            <img src="Slide_Page_08.png" alt="Slide 08" class="max-h-full max-w-full object-contain shadow-2xl rounded" onerror="this.src='https://placehold.co/1920x1080/1e293b/94a3b8?text=Slide_Page_08.png+Missing'">
+        </article>
+        <!-- Slide 09 -->
+        <article class="slide w-full h-full p-4 md:p-8 hidden items-center justify-center">
+            <img src="Slide_Page_09.png" alt="Slide 09" class="max-h-full max-w-full object-contain shadow-2xl rounded" onerror="this.src='https://placehold.co/1920x1080/1e293b/94a3b8?text=Slide_Page_09.png+Missing'">
+        </article>
+        <!-- Slide 10 -->
+        <article class="slide w-full h-full p-4 md:p-8 hidden items-center justify-center">
+            <img src="Slide_Page_10.png" alt="Slide 10" class="max-h-full max-w-full object-contain shadow-2xl rounded" onerror="this.src='https://placehold.co/1920x1080/1e293b/94a3b8?text=Slide_Page_10.png+Missing'">
+        </article>
+        <!-- Slide 11 -->
+        <article class="slide w-full h-full p-4 md:p-8 hidden items-center justify-center">
+            <img src="Slide_Page_11.png" alt="Slide 11" class="max-h-full max-w-full object-contain shadow-2xl rounded" onerror="this.src='https://placehold.co/1920x1080/1e293b/94a3b8?text=Slide_Page_11.png+Missing'">
+        </article>
+    </main>
+
+    <!-- Consolidated Bottom Control Bar -->
+    <div id="bottom-bar" class="flex-shrink-0 bg-slate-900 border-t border-yellow-600 shadow-[0_-4px_20px_rgba(0,0,0,0.5)] z-20">
+        <!-- Progress Bar -->
+        <div class="h-1 w-full bg-slate-800">
+            <div id="progress-bar" class="h-full bg-yellow-500 transition-all duration-300" style="width: 9%"></div>
+        </div>
+
+        <div class="px-6 py-4 flex items-center justify-between gap-4">
+            <!-- Left: Title -->
+            <div class="flex-shrink-0 flex items-center gap-3">
+                <div class="hidden sm:block">
+                    <h1 class="text-xs uppercase tracking-widest text-yellow-500 font-bold">LECTURE 15.4 | THE PACIFIC THEATER</h1>
+       
+                </div>
+            </div>
+
+            <!-- Center: Cue Question Container -->
+            <div id="eq-container" class="flex-1 flex items-center justify-center gap-3 opacity-0 invisible">
+                <span class="bg-yellow-600 text-yellow-50 text-[10px] px-2 py-0.5 rounded font-black uppercase tracking-tighter shrink-0 shadow-lg">Cue Question</span>
+                <p id="eq-text" class="text-sm md:text-base text-yellow-100 font-medium italic text-center max-w-2xl line-clamp-2"></p>
+            </div>
+
+            <!-- Right: Controls -->
+            <div class="flex items-center gap-4">
+                <div class="flex items-center bg-slate-950 px-3 py-1 rounded-full border border-slate-700 shadow-inner">
+                    <span id="slide-counter" class="text-xs font-mono text-yellow-500 font-bold">01 / 11</span>
+                </div>
+                
+                <div class="flex items-center gap-1">
+                    <button onclick="prevSlide()" class="p-2 rounded bg-slate-800 border border-slate-700 hover:bg-slate-700 hover:border-slate-500 transition-colors disabled:opacity-30" id="prev-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                    </button>
+                    <button onclick="nextSlide()" class="p-2 rounded bg-slate-800 border border-slate-700 hover:bg-slate-700 hover:border-slate-500 transition-colors disabled:opacity-30" id="next-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                    </button>
+                </div>
+
+                <button onclick="toggleFullScreen()" class="p-2 rounded text-yellow-400 bg-slate-800 border border-slate-700 hover:bg-slate-700 transition-colors hidden md:block" title="Toggle Fullscreen">
+                    <svg id="fs-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlideIndex = 0;
+        const totalSlides = 11;
+        const slides = document.querySelectorAll('.slide');
+        
+        // Mapping of Slide Number (1-indexed) to Cue Questions
+        const cueQuestions = {
+            4: "How did the 'War of Distances' in the Pacific fundamentally change the logistics of combat compared to the war in Europe?",
+            5: "In what ways did the Bushido Code create a fatal cultural misunderstanding regarding the treatment of prisoners of war?",
+            6: "How did the intelligence breakthrough at Station Hypo allow American forces to turn a potential ambush into a decisive victory?",
+            7: "Why was the strategy of leaving certain Japanese strongholds to 'withering on the vine' more effective than a direct island-by-island assault?",
+            8: "How did the introduction of Kamikaze tactics and the fanatical defense of these islands influence American projections for an invasion of Japan?",
+            9: "To what extent was Truman's decision to use the atomic bomb driven by the desire to avoid the projected casualties of Operation Downfall?",
+            10: "Beyond the immediate surrender of Japan, how did the use of nuclear weapons transform the geopolitical landscape of the post-war world?",
+            11: "How does the transition of Japan from a wartime enemy to a stable democratic ally serve as a model for post-conflict reconstruction?"
+        };
+
+        function updateUI() {
+            // Update Slides
+            slides.forEach((slide, index) => {
+                if (index === currentSlideIndex) {
+                    slide.classList.remove('hidden');
+                    slide.classList.add('flex');
+                } else {
+                    slide.classList.add('hidden');
+                    slide.classList.remove('flex');
+                }
+            });
+
+            // Update Slide Counter (Leading Zeros)
+            const currentNum = (currentSlideIndex + 1).toString().padStart(2, '0');
+            const totalNum = totalSlides.toString().padStart(2, '0');
+            document.getElementById('slide-counter').innerText = `${currentNum} / ${totalNum}`;
+
+            // Update Progress Bar
+            const progress = ((currentSlideIndex + 1) / totalSlides) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+
+            // Update Cue Question Container
+            const eqContainer = document.getElementById('eq-container');
+            const eqText = document.getElementById('eq-text');
+            const question = cueQuestions[currentSlideIndex + 1];
+
+            if (question) {
+                eqText.innerText = question;
+                eqContainer.classList.remove('opacity-0', 'invisible');
+            } else {
+                eqContainer.classList.add('opacity-0', 'invisible');
+            }
+
+            // Update Button States
+            document.getElementById('prev-btn').disabled = (currentSlideIndex === 0);
+            document.getElementById('next-btn').disabled = (currentSlideIndex === totalSlides - 1);
+        }
+
+        function nextSlide() {
+            if (currentSlideIndex < totalSlides - 1) {
+                currentSlideIndex++;
+                updateUI();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlideIndex > 0) {
+                currentSlideIndex--;
+                updateUI();
+            }
+        }
+
+        function toggleFullScreen() {
+            const app = document.getElementById('presentation-app');
+            if (!document.fullscreenElement) {
+                app.requestFullscreen().catch(err => {
+                    console.error(`Error attempting to enable full-screen mode: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // Event Listeners
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            } else if (e.key === 'f') {
+                toggleFullScreen();
+            }
+        });
+
+        document.addEventListener('fullscreenchange', () => {
+            const icon = document.getElementById('fs-icon');
+            if (document.fullscreenElement) {
+                icon.innerHTML = '<path d="M8 3v3a2 2 0 0 1-2 2H3"/><path d="M21 8h-3a2 2 0 0 1-2-2V3"/><path d="M3 16h3a2 2 0 0 1 2 2v3"/><path d="M16 21v-3a2 2 0 0 1 2-2h3"/>';
+            } else {
+                icon.innerHTML = '<path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/>';
+            }
+        });
+
+        // Initialize UI
+        updateUI();
+    </script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 15.3: The European Theater</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { overflow: hidden; }
+        #eq-container {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .slide {
+            transition: opacity 0.3s ease-in-out;
+        }
+        /* Military Color Palette */
+        .bg-military-navy { background-color: #0f172a; }
+        .bg-military-bar { background-color: #020617; }
+        .bg-military-red { background-color: #ef4444; }
+        .border-military-red { border-color: #ef4444; }
+        .text-military-red { color: #f87171; }
+        
+        .placeholder-box {
+            background-color: #1e293b;
+            border: 2px dashed #475569;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+<body id="presentation-app" class="bg-military-navy text-white font-sans antialiased h-screen flex flex-col">
+
+    <!-- Main Slide Container -->
+    <main id="slides-container" class="flex-1 flex overflow-hidden relative z-0">
+        <!-- Slides generated via JS for cleaner code and leading zero formatting -->
+        <script>
+            const slideCount = 13;
+            const container = document.getElementById('slides-container');
+            
+            for (let i = 1; i <= slideCount; i++) {
+                const padIndex = String(i).padStart(2, '0');
+                const article = document.createElement('article');
+                article.id = `slide-${i}`;
+                article.className = `slide w-full h-full p-4 md:p-8 ${i === 1 ? 'flex' : 'hidden'} items-center justify-center`;
+                
+                // Using a direct placeholder link if local image fails
+                const placeholderUrl = `https://placehold.co/1920x1080/1e293b/94a3b8?text=Slide___Page_${padIndex}.png`;
+
+                article.innerHTML = `
+                    <img src="Slide__Page_${padIndex}.png" 
+                         alt="Slide ${padIndex}" 
+                         class="max-h-full max-w-full object-contain shadow-2xl rounded border border-slate-800"
+                         onerror="this.src='${placeholderUrl}'">
+                `;
+                container.appendChild(article);
+            }
+        </script>
+    </main>
+
+    <!-- Consolidated Bottom Bar -->
+    <div id="bottom-bar" class="flex-shrink-0 bg-military-bar border-t border-military-red shadow-[0_-4px_20px_rgba(0,0,0,0.5)] z-20">
+        <!-- Progress Bar -->
+        <div class="h-1 bg-slate-800 w-full overflow-hidden">
+            <div id="progress-bar" class="h-full bg-military-red transition-all duration-300" style="width: 7.69%"></div>
+        </div>
+
+        <div class="px-4 py-3 flex items-center justify-between gap-4">
+            <!-- Left: Title -->
+            <div class="flex-shrink-0">
+                <h1 class="text-sm md:text-base font-bold text-slate-300 tracking-tight">
+                    Lecture 15.3: <span class="text-white uppercase tracking-wider">The European Theater</span>
+                </h1>
+            </div>
+
+            <!-- Center: Cue Question Container -->
+            <div id="eq-container" class="flex-1 flex items-center justify-center gap-3 opacity-0 invisible transition-all duration-500 transform translate-y-1">
+                <span class="bg-military-red text-white text-[10px] font-black uppercase px-2 py-0.5 rounded shadow-lg flex-shrink-0">
+                    Cue Question
+                </span>
+                <p id="eq-text" class="text-xs md:text-sm text-yellow-100 font-medium italic line-clamp-1 text-center max-w-2xl"></p>
+            </div>
+
+            <!-- Right: Controls -->
+            <div class="flex items-center gap-3 md:gap-6">
+                <div id="slide-counter" class="text-xs md:text-sm font-mono text-slate-400">
+                    01 / 13
+                </div>
+                
+                <div class="flex items-center gap-1 md:gap-2">
+                    <button onclick="prevSlide()" class="p-2 rounded bg-slate-800 border border-slate-700 hover:bg-slate-700 text-white transition-colors disabled:opacity-30" id="prev-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                    </button>
+                    <button onclick="nextSlide()" class="p-2 rounded bg-slate-800 border border-slate-700 hover:bg-slate-700 text-white transition-colors disabled:opacity-30" id="next-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+                    </button>
+                </div>
+
+                <button onclick="toggleFullScreen()" class="hidden md:flex p-2 text-yellow-400 bg-slate-800 border border-slate-700 hover:bg-slate-700 rounded transition-colors">
+                    <svg id="fs-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlideIndex = 0;
+        const totalSlides = 13;
+        const progressBar = document.getElementById('progress-bar');
+        const slideCounter = document.getElementById('slide-counter');
+        const eqContainer = document.getElementById('eq-container');
+        const eqText = document.getElementById('eq-text');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+
+        // Extracting Cue Questions from Guided Notes
+        const cueQuestions = {
+            4: "How did the conflicting priorities of Stalin, Churchill, and Roosevelt shape the early Allied strategy in Europe?",
+            5: "What critical lessons did American forces learn from their initial encounters with Rommel's Afrika Korps?",
+            6: "Why did the Allied advance through Italy prove to be far more difficult than originally anticipated by Churchill?",
+            7: "How did the introduction of the P-51 Mustang fundamentally change the effectiveness of Allied bombing raids over Germany?",
+            8: "In what ways did the combat record of the Red Tails challenge the prevailing social and military policies of the 1940s?",
+            9: "How did the combination of military deception and massive amphibious force enable the Allies to establish a Second Front?",
+            10: "How did General Patton's application of 'lightning war' tactics accelerate the collapse of German control in France?",
+            11: "What was the strategic significance of the Allied victory in the Ardennes regarding Germany's ability to continue the war?",
+            12: "How did the sudden change in American leadership affect the final demands placed upon the surrendering Nazi regime?",
+            13: "Which single element of the Allied strategy do you believe was most indispensable for the final defeat of Nazi Germany?"
+        };
+
+        function updateUI() {
+            // Manage Slide Visibility
+            for (let i = 1; i <= totalSlides; i++) {
+                const slide = document.getElementById(`slide-${i}`);
+                if (i === currentSlideIndex + 1) {
+                    slide.classList.remove('hidden');
+                    slide.classList.add('flex');
+                } else {
+                    slide.classList.add('hidden');
+                    slide.classList.remove('flex');
+                }
+            }
+
+            const currentNum = currentSlideIndex + 1;
+
+            // Update Counter & Progress
+            slideCounter.textContent = `${String(currentNum).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
+            progressBar.style.width = `${(currentNum / totalSlides) * 100}%`;
+
+            // Update Cue Questions
+            if (cueQuestions[currentNum]) {
+                eqText.textContent = cueQuestions[currentNum];
+                eqContainer.classList.remove('opacity-0', 'invisible', 'translate-y-1');
+            } else {
+                eqContainer.classList.add('opacity-0', 'invisible', 'translate-y-1');
+            }
+
+            // Buttons state
+            prevBtn.disabled = currentSlideIndex === 0;
+            nextBtn.disabled = currentSlideIndex === totalSlides - 1;
+        }
+
+        function nextSlide() { if (currentSlideIndex < totalSlides - 1) { currentSlideIndex++; updateUI(); } }
+        function prevSlide() { if (currentSlideIndex > 0) { currentSlideIndex--; updateUI(); } }
+        
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) document.getElementById('presentation-app').requestFullscreen();
+            else document.exitFullscreen();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+            else if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        updateUI();
+    </script>
+</body>
+</html>
